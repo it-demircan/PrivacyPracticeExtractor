@@ -22,7 +22,6 @@ public class Main {
 		//ISentenceSplitter splitter = new SentenceSplitter();
 		//List<String> test = splitter.splitSentences("Hallo du Vogel. Ich bin Doof. Wieso?");
 		ILemmatizer lemma = new Lemmatizer();
-		Stemmer 
 		System.out.println(lemma.lemmatize("we are better"));
 	}
 
