@@ -38,7 +38,7 @@ public class Sentence {
 				result += " "+word.getStem();
 				break;
 			case Complete:
-				result += "["+word.getValue()+";"+word.getLemma()+";"+word.getStem()+";"+word.getPosTag()+";"+word.getPosition()+"] ";
+				result += "["+word.getValue()+";L:"+word.getLemma()+";S:"+word.getStem()+";PT:"+word.getPosTag()+";isStopWord:"+word.isStopWord()+";P:"+word.getPosition()+"] ";
 			}	
 		}
 		return result;

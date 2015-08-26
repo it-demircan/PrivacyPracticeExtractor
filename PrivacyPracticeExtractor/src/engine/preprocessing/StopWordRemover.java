@@ -8,6 +8,7 @@ import java.util.List;
 import services.ISettingLoader;
 import services.ITextReader;
 import services.Logger;
+import model.*;
 
 public class StopWordRemover implements IStopWordRemover{ 
 	ITextReader textReader;
@@ -39,6 +40,29 @@ public class StopWordRemover implements IStopWordRemover{
 		}
 		Logger.info("Stop words removed.");
 		return text;
+	}
+	
+	public boolean checkStopWord(String text){
+		if(!loaded){
+			Logger.info("Loading StopWord-List.");
+			loadStopWords();
+		}
+		Logger.info("Marking stop words.");
+		for(String stopWord : stopWordList){
+			if(text.equals(stopWord))
+				return true;
+		}
+		Logger.info("Stop words marked.");
+		return false;
+	}
+	
+	public void markStopWords(Text processingText){
+		for(Sentence nextSentence : processingText.getSentences()){
+			for(Word nextWord : nextSentence.getWords()){
+				if(checkStopWord(nextWord.getValue())||checkStopWord(nextWord.getStem())||checkStopWord(nextWord.getLemma()))
+					nextWord.setStopWord(true);
+			}
+		}
 	}
 	
 	private void loadStopWords(){

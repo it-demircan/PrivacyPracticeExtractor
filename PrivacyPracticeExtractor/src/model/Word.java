@@ -3,6 +3,7 @@ package model;
 public class Word {
 	String value, stem, lemma, posTag;
 	int position;
+	boolean stopWord;
 
 	public Word(int position){
 		value = "";
@@ -10,6 +11,17 @@ public class Word {
 		lemma = "";
 		posTag = "";
 		this.position = position;
+	}
+	
+	public String getProcessingValue(){
+		return stem;
+	}
+	public boolean isStopWord() {
+		return stopWord;
+	}
+
+	public void setStopWord(boolean stopWord) {
+		this.stopWord = stopWord;
 	}
 	
 	public int getPosition() {
