@@ -19,6 +19,7 @@ public class Main {
 		ITextReader textReader = new TextReader();
 		ISettingLoader settingLoader = new SettingLoader();
 		String exampleTxt = "We collect collect the content and other information you provide when you use our Services, including when you sign up for an account, create or share, and message or communicate with others. This can include information in or about the content you provide, such as the location of a photo or the date a file was created. We also collect information about how you use our Services, such as the types of content you view or engage with or the frequency and duration of your activities.";
+		String exampleTxt2 = "For example, if you use a Groupon mobile application and your mobile device¡¯s settings allow it, we may collect Mobile Location Information from your device.";
 		//IStopWordRemover stopWordRemover = new StopWordRemover(textReader,settingLoader);
 		//Logger.info("Result : " + stopWordRemover.removeStopWords("Hallo you suck"));
 		//ITokenizer tokenizer = new Tokenizer();
@@ -41,8 +42,15 @@ public class Main {
 		IVectorizer mapper = new Vectorizer(corpus);
 		Vector test = mapper.mapToVector(tokenedText.getSentences().get(0));
 		
+		Text testText = myTokenizer.tokenizeToText(exampleTxt2);
+		myStemmer.stemm(testText);
+		myRemover.markStopWords(testText);
+		Vector test2 = mapper.mapToVector(testText.getSentences().get(0));
+		
+		
 		System.out.println(corpus.toString());
 		System.out.println(test.toString());
+		System.out.println(test2.toString());
 		//System.out.println(tokenedText.toString(WordType.Complete));
 		//System.out.println(myStemmer.stemm("biologically"));
 		
@@ -51,3 +59,5 @@ public class Main {
 	}
 
 }
+
+

@@ -20,9 +20,32 @@ public class Vectorizer implements IVectorizer{
 			pos = dictionary.getPositionOfElement(word.getProcessingValue());
 			if(pos > -1){
 				mapping.setValue(pos, mapping.getValue(pos)+1.0);
+				//TF-IDF
+				//mapping.setValue(pos,computeWeighting(sen,word));
 			}
 		}
 		return mapping;
+	}
+	
+	private double computeWeighting(Sentence sen, Word word){
+		double weight = 0.0;
+		
+		//inverse document frequency
+		double idf = 0.0;
+		
+		//term frequency
+		double occur = 0.0;
+		//Count occurrece in sentence - 
+		for(Word nextWord : sen.getWords()){
+			if(nextWord.getProcessingValue().equals(word.getProcessingValue()))
+				occur++;
+		}
+		
+		double occurenceInSentence = dictionary.getOccurrenceOfElement(word.getProcessingValue());
+		double numberOfSentences = dictionary.getNumberOfSentences();
+		idf = Math.log(numberOfSentences/occurenceInSentence);
+		weight = idf*occur;
+		return weight;
 	}
 
 	@Override
