@@ -16,6 +16,35 @@ import edu.stanford.nlp.trees.WordStemmer;
 
 public class Main {
 	public static void main(String[] args) {
+		testClassifier();
+	}
+	
+	private static void testClassifier(){
+		ITextWriter writer = new TextWriter();
+		ITextReader reader = new TextReader();
+		String testPath = "C:\\Users\\MoePC\\Desktop\\test2.txt";
+		
+		Tree<Label> root = new Tree(new Label("Privacy Policy"));
+		//Sub Categories
+		Tree<Label> sharing = root.addChild(new Label("Sharing"));
+		Tree<Label> collecting = root.addChild(new Label("Collecting"));
+		
+		//Sub Sub Categories
+		Tree<Label> sharingWithOther = sharing.addChild(new Label("Sharing With Other"));
+			
+		try {
+			LabelConverter.write(root, writer, testPath);
+		
+			Tree<Label> testRoot = LabelConverter.read(reader, testPath);
+			LabelConverter.write(testRoot, writer, testPath);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(Tree.computeDistance(sharingWithOther, sharingWithOther));
+	}
+
+	private static void testPP(){
 		ITextReader textReader = new TextReader();
 		ISettingLoader settingLoader = new SettingLoader();
 		String exampleTxt = "We collect collect the content and other information you provide when you use our Services, including when you sign up for an account, create or share, and message or communicate with others. This can include information in or about the content you provide, such as the location of a photo or the date a file was created. We also collect information about how you use our Services, such as the types of content you view or engage with or the frequency and duration of your activities.";
@@ -57,7 +86,6 @@ public class Main {
 		
 		//System.out.println(myTest.toString(WordType.Raw));
 	}
-
 }
 
 
