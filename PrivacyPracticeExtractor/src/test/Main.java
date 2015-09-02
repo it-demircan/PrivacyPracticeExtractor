@@ -1,5 +1,6 @@
 package test;
 
+import java.util.HashMap;
 import java.util.List;
 
 import model.Text;
@@ -9,6 +10,7 @@ import engine.preprocessing.IStopWordRemover;
 import engine.preprocessing.StopWordRemover;
 import services.*;
 import engine.preprocessing.*;
+import engine.classifier.*;
 import model.*;
 
 import edu.stanford.*;
@@ -29,19 +31,63 @@ public class Main {
 		Tree<Label> sharing = root.addChild(new Label("Sharing"));
 		Tree<Label> collecting = root.addChild(new Label("Collecting"));
 		
-		//Sub Sub Categories
-		Tree<Label> sharingWithOther = sharing.addChild(new Label("Sharing With Other"));
-			
-		try {
-			LabelConverter.write(root, writer, testPath);
 		
-			Tree<Label> testRoot = LabelConverter.read(reader, testPath);
-			LabelConverter.write(testRoot, writer, testPath);
+		HashMap<Vector, Label> mapping = new HashMap<Vector,Label>();
+		Vector one = new Vector(2);
+		one.setValue(0, 1);
+		
+		Vector two = new Vector(2);
+		two.setValue(0, 1.5);
+		
+		Vector three = new Vector(2);
+		three.setValue(1, 1);
+		
+		Vector four = new Vector(2);
+		four.setValue(1,1.5);
+		
+		Vector five = new Vector(2);
+		five.setValue(0,1);
+		five.setValue(1, 2.5);
+		
+		Vector six = new Vector(2);
+		six.setValue(0,1.5);
+		six.setValue(1, 2.5);
+		
+		mapping.put(one, sharing.getData());
+		mapping.put(two, sharing.getData());
+		mapping.put(three, collecting.getData());
+		mapping.put(four, collecting.getData());
+		mapping.put(five, sharing.getData());
+		mapping.put(six, sharing.getData());
+		
+		
+		
+		Hieron myClassifier = new Hieron();
+		try {
+			List<Label> myTree = myClassifier.train(mapping, root);
+			Label test = myClassifier.predictLabel(one);
+			
+			System.out.println(test.getName());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(Tree.computeDistance(sharingWithOther, sharingWithOther));
+		
+		
+		
+		//Sub Sub Categories
+//		Tree<Label> sharingWithOther = sharing.addChild(new Label("Sharing With Other"));
+//		Tree<Label> sharingGov = sharing.addChild(new Label("Sharing With Gov"));
+//		Tree<Label> sharingWithFacebook = sharingWithOther.addChild(new Label("Sharing with Facebook"));
+//		try {
+//			LabelConverter.write(root, writer, testPath);
+//		
+//			Tree<Label> testRoot = LabelConverter.read(reader, testPath);
+//			LabelConverter.write(testRoot, writer, testPath);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 	private static void testPP(){

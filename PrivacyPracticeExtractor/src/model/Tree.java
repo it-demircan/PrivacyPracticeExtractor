@@ -1,48 +1,67 @@
 package model;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class Tree<T extends Comparable<T>> implements Comparable<Tree> {
-	
-	/*                  Static Methods                         */
-	public static int computeDistance(Tree nodeOne, Tree nodeTwo){
+
+	/* Static Methods */
+	public static int computeDistance(Tree nodeOne, Tree nodeTwo) {
 		int length;
-		Tree jumper;
-		Tree deeperNode, shorterNode;
-		boolean subPath = false;
-		
-		if(nodeOne.distanceToRoot()> nodeTwo.distanceToRoot()){
-			deeperNode = nodeOne;
-			shorterNode = nodeTwo;
-		}
-		else{
-			deeperNode = nodeTwo;
-			shorterNode = nodeOne;
-		}
-		
-		//Check if the edges of the shorter node is subset of the deeper node edges. 
-		
-		jumper = deeperNode;
-		while(jumper != null){
-			
-			if(jumper.compareTo(shorterNode) != 0){
-				jumper = jumper.parent;
-			}else{
-				subPath = true;
-				jumper = null;//Exit
-			}
-		}
-		
-		if(subPath){
-			length = deeperNode.distanceToRoot() - shorterNode.distanceToRoot();
-		}else{
-			length = deeperNode.distanceToRoot() + shorterNode.distanceToRoot();
-		}
-		
+		Tree jumper = getFirstEqualAnchestor(nodeOne, nodeTwo);
+		length = nodeOne.distanceToRoot() + nodeTwo.distanceToRoot() - 2
+				* jumper.distanceToRoot();
 		return length;
 	}
-	
-	/*                (non static) Class Implementation                         */	
+
+	/**
+	 * Compute the nodes to "mainNode" excluding all common node on the path to "excludingNode"
+	 * @return P(mainNode)\P(excludingNode)
+	 */
+	public static List<Tree> getExcludingPath(Tree mainNode, Tree excludingNode) {
+		Tree anchestor = getFirstEqualAnchestor(mainNode, excludingNode);
+		return getRootedSubPath(anchestor, mainNode);
+	}
+
+	private static List<Tree> getRootedSubPath(Tree startPoint, Tree endPoint) {
+		Tree jumper = endPoint;
+		List<Tree> subPath = new LinkedList<Tree>();
+		
+		if(startPoint.compareTo(endPoint) == 0)
+			return subPath;
+
+		do {
+			subPath.add(jumper);
+			jumper = jumper.parent;
+		} while (jumper != null && jumper.compareTo(startPoint) != 0);
+		return subPath;
+	}
+
+	private static Tree getFirstEqualAnchestor(Tree nodeOne, Tree nodeTwo) {
+		Tree anchestor = null;
+		Tree jumper = nodeOne;
+		Tree secondJumper = nodeTwo;
+
+		while (jumper != null) {
+			secondJumper = nodeTwo;
+
+			while (secondJumper != null) {
+				if (jumper.compareTo(secondJumper) != 0) {
+					secondJumper = secondJumper.parent;
+				} else {
+					anchestor = secondJumper;
+					secondJumper = null;
+					jumper = null;
+				}
+			}
+			if (jumper != null)
+				jumper = jumper.parent;
+		}
+
+		return anchestor;
+	}
+
+	/* (non static) Class Implementation */
 	T data;
 	Tree<T> parent;
 	List<Tree<T>> children;
@@ -58,18 +77,18 @@ public class Tree<T extends Comparable<T>> implements Comparable<Tree> {
 		this.children.add(childNode);
 		return childNode;
 	}
-	
-	public int distanceToRoot(){
+
+	public int distanceToRoot() {
 		int length = 0;
 		Tree<T> node = this;
-		while(node.parent != null){
+		while (node.parent != null) {
 			length++;
 			node = node.parent;
 		}
-		
+
 		return length;
 	}
-	
+
 	public T getData() {
 		return data;
 	}
@@ -93,7 +112,7 @@ public class Tree<T extends Comparable<T>> implements Comparable<Tree> {
 	public void setChildren(List<Tree<T>> children) {
 		this.children = children;
 	}
-	
+
 	@Override
 	public int compareTo(Tree arg0) {
 		return this.data.compareTo((T) arg0.data);
