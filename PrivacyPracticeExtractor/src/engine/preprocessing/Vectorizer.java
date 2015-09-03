@@ -7,13 +7,14 @@ import model.*;
 public class Vectorizer implements IVectorizer{
 	Dictionary dictionary;
 	
-	public Vectorizer(Dictionary dictionary){
-		this.dictionary = dictionary;
+	public void injectCorpus(Dictionary corpus){
+		this.dictionary = corpus;
 	}
 	
-	
 	@Override
-	public Vector mapToVector(Sentence sen) {
+	public Vector mapToVector(Sentence sen) throws Exception {
+		if(dictionary == null || dictionary.getSize() == 0)
+			throw new Exception("Corpus not injected into Vectorizer");
 		Vector mapping = new Vector(dictionary.getSize());
 		int pos = -1;
 		for(Word word: sen.getWords()){
@@ -49,9 +50,15 @@ public class Vectorizer implements IVectorizer{
 	}
 
 	@Override
-	public HashMap<Sentence, Vector> mapToVector(Text text) {
-		// TODO Auto-generated method stub
-		return null;
+	public HashMap<Sentence, Vector> mapToVector(Text text) throws Exception {
+		if(dictionary == null || dictionary.getSize() == 0)
+			throw new Exception("Corpus not injected into Vectorizer");
+		HashMap<Sentence, Vector> mapping = new HashMap<Sentence,Vector>();
+		
+		for(Sentence sen: text.getSentences()){
+			mapping.put(sen, mapToVector(sen));
+		}
+		return mapping;
 	}
 
 }

@@ -30,7 +30,6 @@ public class StopWordRemover implements IStopWordRemover{
 			Logger.info("Loading StopWord-List.");
 			loadStopWords();
 		}
-		Logger.info("Removing stop words.");
 		for(String stopWord : stopWordList){
 			try{
 				text = text.replace(stopWord, "");
@@ -38,7 +37,6 @@ public class StopWordRemover implements IStopWordRemover{
 				//Char Seq. not found ->  try next stop word
 			}
 		}
-		Logger.info("Stop words removed.");
 		return text;
 	}
 	
@@ -47,12 +45,10 @@ public class StopWordRemover implements IStopWordRemover{
 			Logger.info("Loading StopWord-List.");
 			loadStopWords();
 		}
-		Logger.info("Marking stop words.");
 		for(String stopWord : stopWordList){
 			if(text.equals(stopWord))
 				return true;
 		}
-		Logger.info("Stop words marked.");
 		return false;
 	}
 	

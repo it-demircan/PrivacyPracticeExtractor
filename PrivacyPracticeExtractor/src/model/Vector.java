@@ -1,6 +1,10 @@
 package model;
 
-public class Vector {
+import java.io.Serializable;
+
+public class Vector implements Serializable{
+	private static final long serialVersionUID = 9008664883741727914L;
+
 	/* static methods */
 	/**
 	 * Vector addition

@@ -1,6 +1,23 @@
 package model;
 
-public class Label implements Comparable<Label>{
+import java.io.Serializable;
+
+public class Label implements Comparable<Label>, Serializable{
+	private static final long serialVersionUID = -2938249652667559326L;
+
+	/*  static implementation */
+	public static String getLabelPath(Tree<Label> labelNode){
+		String res = "";
+		
+		if(labelNode.parent == null)
+			return res;
+		else
+			return getLabelPath(labelNode.parent) + "\\" +labelNode.getData().getName();
+	}
+	
+	/* *************************  */
+	/*  non static implementation */
+	/* *************************  */
 	String name;
 	
 	//equals w^{v}

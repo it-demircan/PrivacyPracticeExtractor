@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,7 +10,9 @@ import java.util.Map;
 /*
  * This class represents the corpus
  */
-public class Dictionary {
+public class Dictionary implements Serializable{
+	private static final long serialVersionUID = -6396271927983667281L;
+	
 	List<CorpusElement> elements;
 	int size; 			   //Number of unique words
 	int numberOfSentences; //Number of "Documents", which are used to generate this corpus.
@@ -130,7 +133,8 @@ public class Dictionary {
 	 * Maps a Entry in a corpus, 
 	 * providing information about its occurrence in all sentences.
 	 */
-	private class CorpusElement{
+	private class CorpusElement implements Serializable{
+		private static final long serialVersionUID = -4480976769846768709L;
 		public String value;			 
 		public int occurrenceInSentence; //Occurrence in all used sentence
 		

@@ -12,6 +12,22 @@ public class SettingLoader implements ISettingLoader{
 		return loadProperty("stopWordList");
 	}
 	
+	public String getPolicyTreeStructureFile() throws FileNotFoundException, IOException {
+		return loadProperty("policyStructureFile");
+	}
+	
+	public String getTrainingDataFolder() throws FileNotFoundException,IOException{
+		return loadProperty("trainingDataFolder");
+	}
+	
+	public String getCorpusFile() throws FileNotFoundException, IOException {
+		return loadProperty("corpusFile");
+	}
+	
+	public String getPrototypesFile() throws FileNotFoundException, IOException{
+		return loadProperty("prototypesFile");
+	}
+	
 	private String loadProperty(String propIdentifier){
 		Properties properties = new Properties();
 		String probValue = "";
