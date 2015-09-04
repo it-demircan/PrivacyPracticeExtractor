@@ -1,1 +1,1 @@
-[null,Privacy Policy];[Privacy Policy,Share];[Privacy Policy,Collect];[Collect,Advertising]
+[null,Privacy Policy];[Privacy Policy,Share];[Privacy Policy,Collect]

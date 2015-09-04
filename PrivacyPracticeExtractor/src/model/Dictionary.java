@@ -120,6 +120,28 @@ public class Dictionary implements Serializable{
 		return size;
 	}
 	
+	public void removeEntriesExcept(List<String> list){
+//		for(int i = 0; i < elements.size();i++){
+//			for(int k = 0; k < list.size();k++)
+//				if(!elements.get(i).value.equals(list.get(k))){
+//					elements.remove(i);
+//				}
+//		}
+//		
+		for (Iterator<CorpusElement> iter = elements.listIterator(); iter.hasNext(); ) {
+		    CorpusElement ce = iter.next();
+		    boolean contained = false;
+			for(int k = 0; k < list.size();k++)
+			{
+				if(ce.value.equals(list.get(k)))
+					contained = true;
+			}
+			if(!contained)
+				iter.remove();
+		}
+		size = elements.size();
+	}
+	
 	public int getNumberOfSentences()
 	{
 		return this.numberOfSentences;

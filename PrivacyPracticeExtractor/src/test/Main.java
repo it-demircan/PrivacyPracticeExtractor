@@ -60,8 +60,8 @@ public class Main {
 		PrivacyPracticeExtractor ppe = ExtractorFactory
 				.createPrivacyPracticeExtractor();
 		
-		//ppe.trainExtractor(false, true);
-		ppe.extract("");
+		ppe.trainExtractor(false, true);
+        //ppe.extract("");
 		/******* Testing PreProcessing */
 //		ITextReader textReader = new TextReader();
 //		ITextWriter textWriter = new TextWriter();

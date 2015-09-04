@@ -16,7 +16,7 @@ public class Sentence {
 	
 	public boolean containsWord(String value){
 		for(int i = 0; i < words.size();i++)
-			if(words.get(i).getValue().equals(value))
+			if(words.get(i).getProcessingValue().equals(value))
 				return true;
 		return false;
 	}

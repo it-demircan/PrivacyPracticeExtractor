@@ -48,6 +48,11 @@ public class Label implements Comparable<Label>, Serializable{
 	}
 	
 	@Override
+	public String toString(){
+		return this.name;
+	}
+	
+	@Override
 	public int compareTo(Label arg0) {
 		if(this.name.equals(arg0.name))
 			return 0;

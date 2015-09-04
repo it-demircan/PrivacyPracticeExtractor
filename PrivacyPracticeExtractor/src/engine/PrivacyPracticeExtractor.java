@@ -102,7 +102,7 @@ public class PrivacyPracticeExtractor {
 				System.out.println(labels.get(i).getName());
 				processingText = readLabelData(settingLoader
 						.getTestDataFolder()
-//						.getTrainingDataFolder()
+						//.getTrainingDataFolder()
 						+ Label.getLabelPath(labelMapping.get(labels.get(i))));
 
 				HashMap<Sentence, Vector> vectors = preProcessor
@@ -126,17 +126,6 @@ public class PrivacyPracticeExtractor {
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
-	}
-	
-	static int countAllError = 0;
-	static int counter = 0;
-	private void evaluate(Label predicted, Label correct){
-		Tree<Label> predictedTree = labelMapping.get(predicted);
-		Tree<Label> correctTree = labelMapping.get(correct);
-		
-		int distance = Tree.computeDistance(predictedTree, correctTree);
-		countAllError += distance;
-		counter++;
 	}
 
 	public void trainExtractor(boolean useExistingCorpus, boolean saveCorpus) {
@@ -165,10 +154,17 @@ public class PrivacyPracticeExtractor {
 				Logger.info("Corpus Populated with Trainingdata from Label: "
 						+ recent.getName());
 			}
-
+			
 			if (useExistingCorpus)
 				corpus = DictionaryConverter
 						.read(settingLoader.getCorpusFile());
+			else{
+				int noWords = 100;
+				FeatureSelector fs = new FeatureSelector();
+				HashMap<Label,List<String>> test = fs.selectFeatures(labels, readLabelDataForFeatureSelection(), corpus, noWords);
+				corpus = fs.reduceCorpus(test, corpus);
+			}
+			
 			if (!useExistingCorpus && saveCorpus) {
 				DictionaryConverter
 						.write(corpus, settingLoader.getCorpusFile());
@@ -177,6 +173,7 @@ public class PrivacyPracticeExtractor {
 			//Save the number of documents for each label
 			LabelDocumentCounterConverter.write(labelDocumentCounter, settingLoader.getLabelDocumentCounterFile());
 			
+		
 			/* *****************************************/
 			/* Mapping training data into vector space */
 			/* *****************************************/
@@ -216,6 +213,15 @@ public class PrivacyPracticeExtractor {
 					+ " mapped into Vector Space...");
 		}
 		return trainingSet;
+	}
+	
+	private HashMap<Label, Text> readLabelDataForFeatureSelection() throws IOException{
+		HashMap<Label,Text> readData = new HashMap<Label,Text>();
+		for(int i = 1; i<labels.size();i++){
+			Text processingText = readLabelData(settingLoader.getTrainingDataFolder() + Label.getLabelPath(labelMapping.get(labels.get(i))));
+			readData.put(labels.get(i),processingText);
+		}
+		return readData;
 	}
 
 	private Text readLabelData(String pathToLabelFolder) throws IOException {
