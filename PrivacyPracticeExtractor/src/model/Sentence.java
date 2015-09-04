@@ -6,11 +6,13 @@ import java.util.List;
 public class Sentence {
 	List<Word> words;
 	int position; //Position in Text
+	Label correct, predicted;
 
 	public Sentence(int position) {
 		words = new LinkedList<Word>();
 		this.position = position;
 	}
+
 
 	public void appendWord(Word word) {
 		words.add(word);
@@ -22,6 +24,19 @@ public class Sentence {
 
 	public void setWords(List<Word> words) {
 		this.words = words;
+	}
+	
+	public void setLabel(Label correct, Label predicted){
+		this.correct = correct;
+		this.predicted = predicted;
+	}
+	
+	public Label getCorrectLabel(){
+		return correct;
+	}
+	
+	public Label getPredictedLabel(){
+		return predicted;
 	}
 
 	public String ToString(WordType type){

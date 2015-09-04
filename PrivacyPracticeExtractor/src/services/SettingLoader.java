@@ -28,6 +28,15 @@ public class SettingLoader implements ISettingLoader{
 		return loadProperty("prototypesFile");
 	}
 	
+	public String getTestDataFolder() throws FileNotFoundException, IOException{
+		return loadProperty("testDataFolder");
+	}
+	
+	public String getLabelDocumentCounterFile() throws FileNotFoundException,
+			IOException {
+		return loadProperty("labelDocumentCounter");
+	}
+	
 	private String loadProperty(String propIdentifier){
 		Properties properties = new Properties();
 		String probValue = "";
@@ -41,4 +50,6 @@ public class SettingLoader implements ISettingLoader{
 		}
 		return probValue;
 	}
+
+
 }
