@@ -100,9 +100,9 @@ public class PrivacyPracticeExtractor {
 			List<Sentence> classified = new LinkedList<Sentence>();
 			for (int i = 1; i < labels.size(); i++) {
 				System.out.println(labels.get(i).getName());
-				//TODO
 				processingText = readLabelData(settingLoader
-						.getTrainingDataFolder()
+						.getTestDataFolder()
+//						.getTrainingDataFolder()
 						+ Label.getLabelPath(labelMapping.get(labels.get(i))));
 
 				HashMap<Sentence, Vector> vectors = preProcessor
@@ -113,7 +113,8 @@ public class PrivacyPracticeExtractor {
 					Map.Entry pair = (Map.Entry) it.next();
 					Sentence sen = (Sentence) pair.getKey();
 					Label result = classifier.predictLabel((Vector) pair
-							.getValue());					
+							.getValue());	
+					
 					sen.setLabel(labels.get(i), result);
 					classified.add(sen);
 					it.remove();				

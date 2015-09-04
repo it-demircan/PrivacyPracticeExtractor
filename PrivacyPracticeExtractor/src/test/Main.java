@@ -7,8 +7,16 @@ import java.util.List;
 import model.Text;
 import model.WordType;
 
+import engine.preprocessing.IPreProcessor;
+import engine.preprocessing.IStemmer;
 import engine.preprocessing.IStopWordRemover;
+import engine.preprocessing.ITokenizer;
+import engine.preprocessing.IVectorizer;
+import engine.preprocessing.PreProcessor;
+import engine.preprocessing.Stemmer;
 import engine.preprocessing.StopWordRemover;
+import engine.preprocessing.Tokenizer;
+import engine.preprocessing.Vectorizer;
 import services.*;
 import engine.preprocessing.*;
 import engine.classifier.*;
@@ -51,7 +59,37 @@ public class Main {
 	private static void testClassifier() {
 		PrivacyPracticeExtractor ppe = ExtractorFactory
 				.createPrivacyPracticeExtractor();
-		ppe.extract("Our site includes third-party advertising and links to other Web sites.");
+		
+		//ppe.trainExtractor(false, true);
+		ppe.extract("");
+		/******* Testing PreProcessing */
+//		ITextReader textReader = new TextReader();
+//		ITextWriter textWriter = new TextWriter();
+//		ISettingLoader settingLoader = new SettingLoader();
+//		//ppe.extract("Our site includes third-party advertising and links to other Web sites.");		
+//		ITokenizer tokenizer = new Tokenizer();
+//		Dictionary corpus = new Dictionary();
+//		
+//		Text test = tokenizer.tokenizeToText("this is a a sample. this is another another example example example.");
+//		StopWordRemover remover = new StopWordRemover(textReader, settingLoader);
+//		remover.markStopWords(test);
+//		Stemmer myStemmer = new Stemmer();
+//		myStemmer.stemm(test);
+//		System.out.println(test.toString(WordType.Complete));
+//		corpus.populate(test);
+//		System.out.println(corpus.toString());
+//		Vectorizer testizer = new Vectorizer();
+//		testizer.injectCorpus(corpus);
+//		try {
+//			Vector vec = testizer.mapToVector(test.getSentences().get(1));
+//			System.out.println("Out");
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		/******* End Testing PreProcessing */
+		
 		//ppe.trainExtractor(true,false);
 		// ITextWriter writer = new TextWriter();
 		// ITextReader reader = new TextReader();

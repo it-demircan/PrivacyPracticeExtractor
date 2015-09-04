@@ -13,6 +13,13 @@ public class Sentence {
 		this.position = position;
 	}
 
+	
+	public boolean containsWord(String value){
+		for(int i = 0; i < words.size();i++)
+			if(words.get(i).getValue().equals(value))
+				return true;
+		return false;
+	}
 
 	public void appendWord(Word word) {
 		words.add(word);

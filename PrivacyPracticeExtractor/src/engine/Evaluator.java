@@ -35,8 +35,33 @@ public class Evaluator {
 	public void evaluate(List<Sentence> classifiedSentences){
 		computePrecisionRecall(classifiedSentences);
 		computeTreeInducedError(classifiedSentences);
+		countAbsoluteCorrectness(classifiedSentences);
 	}
 
+	private void countAbsoluteCorrectness(List<Sentence> classifiedSentences){
+		int correctLabeling = 0, wrongLabeling = 0;
+		int[] wrongerCounter = new int[labels.size()];
+		for(int i = 0;i<classifiedSentences.size();i++){
+			if(classifiedSentences.get(i).getCorrectLabel().compareTo(classifiedSentences.get(i).getPredictedLabel()) == 0)
+				correctLabeling++;
+			else{
+				wrongLabeling++;
+				for(int k = 0; k < labels.size();k++){
+					if(classifiedSentences.get(i).getPredictedLabel().compareTo(labels.get(k))==0)
+						wrongerCounter[k]++;
+				}
+			}
+		}
+		
+		System.out.println("Correct Labeling:"+correctLabeling);
+		System.out.println("Wrong Labeling: "+wrongLabeling);
+		
+		
+		for(int i = 0; i < wrongerCounter.length;i++){
+			System.out.println(labels.get(i).getName()+":"+wrongerCounter[i]);
+		}
+	}
+	
 	private void computePrecisionRecall(List<Sentence> classifiedSentences) {
 		/* ************************/
 		/* Count False/True Rates */
@@ -107,11 +132,6 @@ public class Evaluator {
 			//precision
 			temp = (double)truePositiv.get(labels.get(i))/ (double)(1.0+truePositiv.get(labels.get(i))+ falsePositiv.get(labels.get(i)));
 			precision += (((double)labelDocumentCounter.get(labels.get(i)) /(double)noSentences) * temp);
-			if(Double.isNaN(precision)){
-				System.out.println("At:"+i);
-				System.out.println("X"+(double)truePositiv.get(labels.get(i)));
-				System.out.println("Y"+falsePositiv.get(labels.get(i)));
-			}
 			
 			//recall
 			temp = (double)truePositiv.get(labels.get(i))/ (double)(1.0+truePositiv.get(labels.get(i))+ falseNegativ.get(labels.get(i)));

@@ -55,6 +55,11 @@ public class Dictionary implements Serializable{
 		}
 	}
 	
+	public String getValue(int pos)
+	{
+		return elements.get(pos).value;
+	}
+	
 	/**
 	 * Adds a new word to the dictionary/corpus
 	 * @param element the word
@@ -65,9 +70,10 @@ public class Dictionary implements Serializable{
 		for(int i = 0; i < elements.size();i++)
 			if(elements.get(i).value.equals(element))
 				exist = true;
-		if(!exist)
+		if(!exist){
 			elements.add(new CorpusElement(element));
-		size++;
+			size++;
+		}		
 		return exist;
 	}
 	

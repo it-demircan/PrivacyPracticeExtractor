@@ -17,12 +17,16 @@ public class Vectorizer implements IVectorizer{
 			throw new Exception("Corpus not injected into Vectorizer");
 		Vector mapping = new Vector(dictionary.getSize());
 		int pos = -1;
+		boolean[] visited = new boolean[dictionary.getSize()];
 		for(Word word: sen.getWords()){
 			pos = dictionary.getPositionOfElement(word.getProcessingValue());
-			if(pos > -1){
-				mapping.setValue(pos, mapping.getValue(pos)+1.0);
+			if(pos > -1 && pos < dictionary.getSize()){
+				//mapping.setValue(pos, mapping.getValue(pos)+1.0);
 				//TF-IDF
-				//mapping.setValue(pos,computeWeighting(sen,word));
+				if(!visited[pos]){
+					mapping.setValue(pos,computeWeighting(sen,word));
+					visited[pos] = true;
+				}
 			}
 		}
 		return mapping;
@@ -44,7 +48,7 @@ public class Vectorizer implements IVectorizer{
 		
 		double occurenceInSentence = dictionary.getOccurrenceOfElement(word.getProcessingValue());
 		double numberOfSentences = dictionary.getNumberOfSentences();
-		idf = Math.log(numberOfSentences/occurenceInSentence);
+		idf = Math.log10(numberOfSentences/occurenceInSentence);
 		weight = idf*occur;
 		return weight;
 	}

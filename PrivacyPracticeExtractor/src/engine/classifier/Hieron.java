@@ -20,18 +20,18 @@ public class Hieron implements IClassifier {
 	HashMap<Label, Tree<Label>> labelMapping;
 	List<Label> labels;
 	boolean reqDataSet;
-	
-	public Hieron(){
+
+	public Hieron() {
 		reqDataSet = false;
 	}
-	
+
 	/**
-	 * Trains the algorithm with a given trainingset based on (hierarchical)
+	 * Trains the algorithm with a given training set based on (hierarchical)
 	 * structure given by policy root node.
 	 */
 	public List<Label> train(HashMap<Vector, Label> trainingSet,
 			Tree<Label> policyRoot) throws Exception {
-		if(!reqDataSet){
+		if (!reqDataSet) {
 			throw new Exception("You must first set required Data to Hieron!");
 		}
 		boolean labelsInit = false;
@@ -57,12 +57,12 @@ public class Hieron implements IClassifier {
 	 * Predicts the label/class for an instance vector
 	 */
 	public Label predictLabel(Vector instance) throws Exception {
-		if(!reqDataSet){
+		if (!reqDataSet) {
 			throw new Exception("You must first set required Data to Hieron! ");
 		}
-		Label prediction = labels.get(0);
+		Label prediction = labels.get(1);
 		double value = Vector.computeInnerProduct(
-				this.computePrototype(labels.get(0)), instance);
+				this.computePrototype(labels.get(1)), instance);
 
 		for (int i = 1; i < labels.size(); i++) {
 			if (Vector.computeInnerProduct(
@@ -94,29 +94,40 @@ public class Hieron implements IClassifier {
 		double distance = Tree.computeDistance(labelMapping.get(correctLabel),
 				labelMapping.get(predictedLabel));
 		double norm = Vector.computeInnerProduct(instance, instance);
+		//Skip zero vector and don't update correct labeling
+		if (norm > 0.0 && distance > 0.0) {
 
-		double lagrangeMultiplier = sufferLoss / (distance * norm);
+			double lagrangeMultiplier = sufferLoss / (distance * norm);
 
-		// Change feature vector to correct label
-		List<Tree> subPath = Tree.getExcludingPath(
-				labelMapping.get(correctLabel),
-				labelMapping.get(predictedLabel));
+			// Change feature vector to correct label
+			List<Tree> subPath = Tree.getExcludingPath(
+					labelMapping.get(correctLabel),
+					labelMapping.get(predictedLabel));
 
-		for (Tree tree : subPath) {
-			Label label = (Label) tree.getData();
-			label.setVector(Vector.add(label.getFeature(),
-					Vector.multiplyScalar(lagrangeMultiplier, instance)));
-		}
+			for (Tree tree : subPath) {
+				Label label = (Label) tree.getData();
+				label.setVector(Vector.add(label.getFeature(),
+						Vector.multiplyScalar(lagrangeMultiplier, instance)));
 
-		subPath.clear();
+				if (Double.isNaN((label.getFeature().getValue(0)))) {
+					System.out.println("Hallo");
+				}
+			}
 
-		// Change feature vector to predicted label
-		subPath = Tree.getExcludingPath(labelMapping.get(predictedLabel),
-				labelMapping.get(correctLabel));
-		for (Tree tree : subPath) {
-			Label label = (Label) tree.getData();
-			label.setVector(Vector.add(label.getFeature(), Vector
-					.multiplyScalar((-1.0) * lagrangeMultiplier, instance)));
+			subPath.clear();
+
+			// Change feature vector to predicted label
+			subPath = Tree.getExcludingPath(labelMapping.get(predictedLabel),
+					labelMapping.get(correctLabel));
+			for (Tree tree : subPath) {
+				Label label = (Label) tree.getData();
+				label.setVector(Vector.add(label.getFeature(), Vector
+						.multiplyScalar((-1.0) * lagrangeMultiplier, instance)));
+
+				if (Double.isNaN((label.getFeature().getValue(0)))) {
+					System.out.println("Hallo");
+				}
+			}
 		}
 	}
 
@@ -167,15 +178,20 @@ public class Hieron implements IClassifier {
 
 		return (res > 0 ? res : 0.0);
 	}
-	
+
 	/**
-	 * This Data is needed for all calculations and have to be set before first usage.
-	 * @param lMapping - Mapping between label and tree node
-	 * @param labels - All labels/classes
+	 * This Data is needed for all calculations and have to be set before first
+	 * usage.
+	 * 
+	 * @param lMapping
+	 *            - Mapping between label and tree node
+	 * @param labels
+	 *            - All labels/classes
 	 */
-	public void setRequiredData(HashMap<Label, Tree<Label>> lMapping, List<Label> labels){
+	public void setRequiredData(HashMap<Label, Tree<Label>> lMapping,
+			List<Label> labels) {
 		labelMapping = lMapping;
-		this.labels =labels;
+		this.labels = labels;
 		reqDataSet = true;
 	}
 }
