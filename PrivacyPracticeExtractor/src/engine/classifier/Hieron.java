@@ -20,9 +20,13 @@ public class Hieron implements IClassifier {
 	HashMap<Label, Tree<Label>> labelMapping;
 	List<Label> labels;
 	boolean reqDataSet;
+	
+	
+	HashMap<Label,List<Vector>> changedFeatures;
 
 	public Hieron() {
 		reqDataSet = false;
+		changedFeatures = new HashMap<Label,List<Vector>>();
 	}
 
 	/**
@@ -35,6 +39,12 @@ public class Hieron implements IClassifier {
 			throw new Exception("You must first set required Data to Hieron!");
 		}
 		boolean labelsInit = false;
+		
+		//init save vector fields
+		for(int i = 1; i< labels.size();i++){
+			if(changedFeatures.get(labels.get(i)) == null)
+				changedFeatures.put(labels.get(i), new LinkedList<Vector>());
+		}
 
 		Iterator it = trainingSet.entrySet().iterator();
 		while (it.hasNext()) {
@@ -48,8 +58,27 @@ public class Hieron implements IClassifier {
 				}
 			}
 			this.update(nextVector, nextLabel, predictLabel(nextVector));
+			
+			//Storing vector for average calculation (optional)
+			for(int i = 1; i< labels.size();i++){
+				changedFeatures.get(labels.get(i)).add(labels.get(i).getFeature());
+			}
+					
 			it.remove(); // avoids a ConcurrentModificationException
 		}
+		
+		//compute average
+		for(int i = 1; i< labels.size();i++){
+			List<Vector> storedVectors = changedFeatures.get(labels.get(i));
+			Vector result = new Vector(storedVectors.get(1).getDimension());
+			for(int k = 0 ; k < storedVectors.size();k++)
+			{
+				result = Vector.add(result,storedVectors.get(k));
+			}
+			
+			labels.get(i).setVector(Vector.multiplyScalar((1.0/((double)storedVectors.size())), result));
+		}
+		
 		return labels;
 	}
 

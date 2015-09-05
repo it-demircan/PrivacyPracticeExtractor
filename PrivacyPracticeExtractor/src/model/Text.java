@@ -25,7 +25,7 @@ public class Text {
 	public String toString(WordType type){
 		String text = "";
 		for(Sentence sen : sentences){
-			text += sen.ToString(type) + System.getProperty("line.separator");
+			text += sen.toString(type) + System.getProperty("line.separator");
 		}
 		return text;
 	}

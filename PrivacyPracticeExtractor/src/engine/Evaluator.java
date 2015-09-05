@@ -3,8 +3,15 @@ package engine;
 import java.util.HashMap;
 import java.util.List;
 
+import services.Logger;
+
 import model.*;
 
+/**
+ * This Class is to evaluate the classification and extraction task.
+ * @author Moe
+ *
+ */
 public class Evaluator {
 	HashMap<Label, Tree<Label>> labelMapping;
 	List<Label> labels;
@@ -33,11 +40,18 @@ public class Evaluator {
 	}
 	
 	public void evaluate(List<Sentence> classifiedSentences){
+		Logger.info("##### Calculate Precision and Recall ####");
 		computePrecisionRecall(classifiedSentences);
+		Logger.info("##### Calculate Tree Induced Error #####");
 		computeTreeInducedError(classifiedSentences);
+		Logger.info("##### Count Absolute Correctness #####");
 		countAbsoluteCorrectness(classifiedSentences);
 	}
 
+	/**
+	 * counts the absolute correctness of classification
+	 * @param classifiedSentences
+	 */
 	private void countAbsoluteCorrectness(List<Sentence> classifiedSentences){
 		int correctLabeling = 0, wrongLabeling = 0;
 		int[] wrongerCounter = new int[labels.size()];
@@ -52,16 +66,19 @@ public class Evaluator {
 				}
 			}
 		}
+		Logger.info("###################################");
+		Logger.info("Correct Labeling:"+correctLabeling);
+		Logger.info("Wrong Labeling: "+wrongLabeling);
 		
-		System.out.println("Correct Labeling:"+correctLabeling);
-		System.out.println("Wrong Labeling: "+wrongLabeling);
-		
-		
+		Logger.info("Mostly frequent wrong prediction into:");
 		for(int i = 0; i < wrongerCounter.length;i++){
 			System.out.println(labels.get(i).getName()+":"+wrongerCounter[i]);
 		}
 	}
 	
+	/**
+	 * Compute the precision and recall for classified sentences
+	 */
 	private void computePrecisionRecall(List<Sentence> classifiedSentences) {
 		/* ************************/
 		/* Count False/True Rates */
@@ -142,12 +159,17 @@ public class Evaluator {
 		// compute f-score
 		beta = 1.0;
 		fScore = (1.0+Math.pow(beta, 2.0)) * (precision*recall)/(Math.pow(beta, 2.0)*precision+recall);
-		System.out.println("Recall:"+recall);
-		System.out.println("Precision:"+precision);
-		System.out.println("FScore:"+fScore);
+		
+		Logger.info("Recall: "+recall);
+		Logger.info("Precision: "+precision);
+		Logger.info("FScore: "+fScore);
 		
 	}
 
+	/**
+	 * computes the tree induced error for a list of classified sentences
+	 * @return tree induced error
+	 */
 	private double computeTreeInducedError(List<Sentence> classifiedSentences) {
 		cumulativeTreeInducedError = 0;
 		evaluatedSentence = 0;
@@ -159,7 +181,7 @@ public class Evaluator {
 					correctTree);
 			evaluatedSentence++;
 		}
-		System.out.println("TIE:"+(double)cumulativeTreeInducedError/(double)evaluatedSentence);
+		Logger.info("TreeInducedError:"+(double)cumulativeTreeInducedError/(double)evaluatedSentence);
 		return (double)cumulativeTreeInducedError/(double)evaluatedSentence;
 	}
 }

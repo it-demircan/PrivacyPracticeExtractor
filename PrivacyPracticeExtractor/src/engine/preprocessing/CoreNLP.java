@@ -5,8 +5,8 @@ import java.util.Properties;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 public abstract class CoreNLP {
-	StanfordCoreNLP pipeline;
-	Properties props;
+	protected StanfordCoreNLP pipeline;
+	protected Properties props;
 	
 	protected void setProperty(String property){
 		props = new Properties();

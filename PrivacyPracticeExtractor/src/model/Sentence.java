@@ -46,7 +46,15 @@ public class Sentence {
 		return predicted;
 	}
 
-	public String ToString(WordType type){
+	@Override
+	public String toString(){
+		String result = "";
+		for(Word word : words)
+			result += " "+word.getValue();
+		return result;
+	}
+	
+	public String toString(WordType type){
 		String result = "";
 		for(Word word : words){
 			switch(type){

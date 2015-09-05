@@ -20,10 +20,12 @@ import engine.preprocessing.Vectorizer;
 import services.*;
 import engine.preprocessing.*;
 import engine.classifier.*;
+import engine.extractor.Extractor;
 import model.*;
 
 import edu.stanford.*;
 import edu.stanford.nlp.trees.WordStemmer;
+
 
 public class Main {
 	public static void main(String[] args) {
@@ -47,9 +49,10 @@ public class Main {
 		root.addChild(new Label("Security"));
 		root.addChild(new Label("Share"));
 		root.addChild(new Label("Truste"));
-		
+
 		try {
-			LabelConverter.write(root, tw, "C:\\Users\\MoePC\\Desktop\\test2.txt");
+			LabelConverter.write(root, tw,
+					"C:\\Users\\MoePC\\Desktop\\test2.txt");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,40 +60,67 @@ public class Main {
 	}
 
 	private static void testClassifier() {
+		//binary 110
+//		for (int i = 10; i < 200; i += 10) {
+//			PrivacyPracticeExtractor ppe = ExtractorFactory
+//					.createPrivacyPracticeExtractor();
+//			ppe.trainExtractor(false, true,i);
+//
+//			PrivacyPracticeExtractor validator = ExtractorFactory
+//					.createPrivacyPracticeExtractor();
+//			validator.evaluate();
+//		}
+		
+		
+	
 		PrivacyPracticeExtractor ppe = ExtractorFactory
 				.createPrivacyPracticeExtractor();
 		
-		ppe.trainExtractor(false, true);
-        //ppe.extract("");
+		Extractor ex = new Extractor();
+		ex.initialize();
+		try {
+			TextReader tr = new TextReader();
+			String policy = tr.readText("C:\\Users\\Moe\\Desktop\\test.txt");
+			
+			HashMap<Label, List<Sentence>> classified = ppe.classifyPolicySentences(policy);
+			HashMap<Label, String> summarized = ex.extract(classified);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		/******* Testing PreProcessing */
-//		ITextReader textReader = new TextReader();
-//		ITextWriter textWriter = new TextWriter();
-//		ISettingLoader settingLoader = new SettingLoader();
-//		//ppe.extract("Our site includes third-party advertising and links to other Web sites.");		
-//		ITokenizer tokenizer = new Tokenizer();
-//		Dictionary corpus = new Dictionary();
-//		
-//		Text test = tokenizer.tokenizeToText("this is a a sample. this is another another example example example.");
-//		StopWordRemover remover = new StopWordRemover(textReader, settingLoader);
-//		remover.markStopWords(test);
-//		Stemmer myStemmer = new Stemmer();
-//		myStemmer.stemm(test);
-//		System.out.println(test.toString(WordType.Complete));
-//		corpus.populate(test);
-//		System.out.println(corpus.toString());
-//		Vectorizer testizer = new Vectorizer();
-//		testizer.injectCorpus(corpus);
-//		try {
-//			Vector vec = testizer.mapToVector(test.getSentences().get(1));
-//			System.out.println("Out");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+		// ITextReader textReader = new TextReader();
+		// ITextWriter textWriter = new TextWriter();
+		// ISettingLoader settingLoader = new SettingLoader();
+		// //ppe.extract("Our site includes third-party advertising and links to other Web sites.");
+		// ITokenizer tokenizer = new Tokenizer();
+		// Dictionary corpus = new Dictionary();
+		//
+		// Text test =
+		// tokenizer.tokenizeToText("this is a a sample. this is another another example example example.");
+		// StopWordRemover remover = new StopWordRemover(textReader,
+		// settingLoader);
+		// remover.markStopWords(test);
+		// Stemmer myStemmer = new Stemmer();
+		// myStemmer.stemm(test);
+		// System.out.println(test.toString(WordType.Complete));
+		// corpus.populate(test);
+		// System.out.println(corpus.toString());
+		// Vectorizer testizer = new Vectorizer();
+		// testizer.injectCorpus(corpus);
+		// try {
+		// Vector vec = testizer.mapToVector(test.getSentences().get(1));
+		// System.out.println("Out");
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
 		/******* End Testing PreProcessing */
-		
-		//ppe.trainExtractor(true,false);
+
+		// ppe.trainExtractor(true,false);
 		// ITextWriter writer = new TextWriter();
 		// ITextReader reader = new TextReader();
 		// String testPath = "C:\\Users\\MoePC\\Desktop\\test2.txt";

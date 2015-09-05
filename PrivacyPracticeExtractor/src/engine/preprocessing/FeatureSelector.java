@@ -15,11 +15,23 @@ import services.ITextReader;
 
 import model.*;
 
-public class FeatureSelector {
+/**
+ * This class implements the "information gain" feature selector
+ * @author Muhammed Demircan
+ */
+public class FeatureSelector implements IFeatureSelector{
 	List<Label> labels;
 	HashMap<Label, Text> readData;
 	Dictionary corpus;
 
+	/**
+	 * Compute the k- top ranked features in a corpus a all classes(labels)
+	 * @param labels - all labels
+	 * @param readData - all data for each label
+	 * @param corpus - recent corpus
+	 * @param noWords - top "noWords" will be selected
+	 * @return Mapping between class/label and top words in corpus
+	 */
 	public HashMap<Label, List<String>> selectFeatures(List<Label> labels,
 			HashMap<Label, Text> readData, Dictionary corpus, int noWords) {
 		HashMap<Label, List<String>> mapping = new HashMap<Label, List<String>>();
@@ -34,6 +46,10 @@ public class FeatureSelector {
 		return mapping;
 	}
 	
+	/**
+	 * reduces the given corpus by the ranked list mapping for each label
+	 * @return reduced corpus
+	 */
 	public Dictionary reduceCorpus(HashMap<Label,List<String>> rankedWords, Dictionary corpus){
 		List<String> union = new LinkedList<String>();
 		// Iterate through vectors hashmap
@@ -49,7 +65,11 @@ public class FeatureSelector {
 		corpus.removeEntriesExcept(union);
 		return corpus;
 	}
-
+	
+	/**
+	 * computes the top k words for the given label/class
+	 * @return List with top k words
+	 */
 	private List<String> computeTopRankedWords(Label recentLabel, int noWords) {
 
 		HashMap<String, Double> rankedWords = new HashMap<String, Double>();
@@ -63,17 +83,14 @@ public class FeatureSelector {
 		}
 
 		TreeMap<String, Double> sortedMap = SortByValue(rankedWords);
-
-		System.out.println("########");
+		
 		for (Entry<String, Double> entry : sortedMap.entrySet()) {
 			if (counter < noWords) {
 				result.add(entry.getKey());
 				counter++;
 
 			}
-			System.out.println(entry.getValue() + ":" + entry.getKey());
 		}
-
 		return result;
 	}
 
@@ -145,7 +162,11 @@ public class FeatureSelector {
 		return sortedMap;
 	}
 }
-
+/**
+ * Helper Class for sorting a hashmap
+ * @author Muhammed Demircan
+ *
+ */
 class ValueComparator implements Comparator<String> {
 
 	Map<String, Double> map;

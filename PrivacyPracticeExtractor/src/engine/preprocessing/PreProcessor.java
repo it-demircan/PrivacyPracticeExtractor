@@ -13,14 +13,16 @@ public class PreProcessor implements IPreProcessor {
 	IStopWordRemover stopWordRemover;
 	IStemmer stemmer;
 	IVectorizer vectorizer;
+	IFeatureSelector fSelector;
 	
 	public PreProcessor(ITokenizer tokenizer,
 			IStopWordRemover stopWordRemover, IStemmer stemmer,
-			IVectorizer vectorizer) {
+			IVectorizer vectorizer, IFeatureSelector fSelector) {
 		this.tokenizer = tokenizer;
 		this.stopWordRemover = stopWordRemover;
 		this.stemmer = stemmer;
 		this.vectorizer = vectorizer;
+		this.fSelector = fSelector;
 	}
 
 	public HashMap<Sentence, Vector> preProcessText(String text) throws Exception {
@@ -46,5 +48,13 @@ public class PreProcessor implements IPreProcessor {
 	
 	public void updateCorpus(Dictionary corpus){
 		vectorizer.injectCorpus(corpus);
+	}
+
+	@Override
+	public Dictionary reduceCorpus(List<Label> labels, HashMap<Label, Text> readData,
+			Dictionary corpus, int noWords) {
+		HashMap<Label,List<String>> reduced = fSelector.selectFeatures(labels, readData, corpus, noWords);
+		corpus = fSelector.reduceCorpus(reduced, corpus);
+		return corpus;
 	}
 }
