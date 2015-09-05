@@ -82,8 +82,9 @@ public class Main {
 			TextReader tr = new TextReader();
 			String policy = tr.readText("C:\\Users\\Moe\\Desktop\\test.txt");
 			
-			HashMap<Label, List<Sentence>> classified = ppe.classifyPolicySentences(policy);
-			HashMap<Label, String> summarized = ex.extract(classified);
+			ppe.extract(policy, "");
+			//HashMap<Label, List<Sentence>> classified = ppe.classifyPolicySentences(policy);
+			//HashMap<Label, String> summarized = ex.extract(classified);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

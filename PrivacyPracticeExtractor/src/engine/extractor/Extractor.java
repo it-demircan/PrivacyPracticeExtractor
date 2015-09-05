@@ -42,12 +42,11 @@ public class Extractor implements IExtractor{
 			List<Sentence> sentences = (List<Sentence>)pair.getValue();
 			String sum = "";
 			for(Sentence sen : sentences){
-				sum += extractFromSentence(sen.toString()) +"\n";
+				sum += extractFromSentence(sen.toString()) +"\r\n ";
 			}
 			summarization.put(recentLabel, sum);
-			it.remove();
+			//it.remove();
 		}
-		
 		return summarization;
 	}
 	

@@ -3,6 +3,8 @@ package engine;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -58,6 +60,50 @@ public class PrivacyPracticeExtractor {
 
 		this.classifier.setRequiredData(labelMapping, labels);
 
+	}
+	
+	
+	public void extract(String privacyPolicy, String outputPath){
+		Logger.info("Extraction process started");
+		try {
+			HashMap<Label, List<Sentence>> classifiedSentence = classifyPolicySentences(privacyPolicy);
+			HashMap<Label, String> summarization = summarize(classifiedSentence);
+			Logger.info("Summarization complete!");
+			
+			
+			//Prepare output folder
+			SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
+		    Date now = new Date();
+		    String strDate = sdfDate.format(now);
+		    strDate = strDate.replace(" ", "_");
+		    strDate = strDate.replace(":", "_");
+		    String preparedPath  = outputPath +"\\"+strDate+"_output";
+		    Logger.info("Saving results at: "+preparedPath);
+			
+			boolean success = (new File(preparedPath)).mkdirs();
+			if (success) {
+			    for(int i = 1; i < labels.size();i++){
+			    	String labelOutput = preparedPath+labels.get(i).getLabelPath(labelMapping.get(labels.get(i)));
+			    	(new File(labelOutput)).mkdirs();
+			    	
+			    	String sentences = "";
+			    	for(Sentence sen: classifiedSentence.get(labels.get(i))){
+			    		sentences += sen.toString() +"\r\n";
+			    	}
+			    	
+			    	String sum = summarization.get(labels.get(i));
+			    	
+			    	textWriter.write(sentences, labelOutput + "\\classifiedSentences.txt");
+			    	textWriter.write(sum, labelOutput + "\\summarization.txt");
+			    }
+			}else{
+				throw new Exception("Output folder could not created!");
+			}
+			Logger.info("Finished");
+		} catch (Exception e) {
+			e.printStackTrace();
+			Logger.error(e.getMessage());
+		}
 	}
 
 	public HashMap<Label, String> summarize(HashMap<Label, List<Sentence>> classifiedSentences) throws Exception{
