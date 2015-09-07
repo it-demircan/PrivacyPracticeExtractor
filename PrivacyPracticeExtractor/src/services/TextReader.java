@@ -15,8 +15,10 @@ public class TextReader implements ITextReader{
 		String readLine = "";
 		try(	FileReader fr = new FileReader(path);
 				BufferedReader br = new BufferedReader(fr)){
-			while((readLine = br.readLine()) != null)
+			while((readLine = br.readLine()) != null){
 				readText.append(readLine);
+				//readText.append(" ");
+			}
 		}
 		return readText.toString();
 	}

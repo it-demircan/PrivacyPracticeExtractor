@@ -57,7 +57,11 @@ public class Hieron implements IClassifier {
 					labels.get(i).init(nextVector.getDimension());
 				}
 			}
-			this.update(nextVector, nextLabel, predictLabel(nextVector));
+			
+			// Online Algo
+			//this.update(nextVector, nextLabel, predictLabel(nextVector));
+			
+			this.update(nextVector, nextLabel, computeSufferLossMaximizingLabel(nextVector,nextLabel));
 			
 			//Storing vector for average calculation (optional)
 			for(int i = 1; i< labels.size();i++){
@@ -176,6 +180,25 @@ public class Hieron implements IClassifier {
 		}
 
 		return prototype;
+	}
+	
+	/**
+	 * Compute the label which couses the maximizing suffer loss based on given instance and label.
+	 * @param instance - recent instance vector
+	 * @param correctLabel - selected label
+	 * @return - Label which couses maximum suffer loss
+	 */
+	private Label computeSufferLossMaximizingLabel(Vector instance, Label correctLabel) throws Exception{
+		double sufferLoss = -1.0;
+		double computed;
+		Label result = null;
+		for(Label lbl : labels){
+			if((computed = computeSufferLoss(instance,correctLabel,lbl)) > sufferLoss){
+				sufferLoss = computed;
+				result= lbl;
+			}
+		}
+		return result;
 	}
 
 	/**

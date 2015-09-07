@@ -160,7 +160,7 @@ public class PrivacyPracticeExtractor {
 			List<Sentence> classified = new LinkedList<Sentence>();
 			for (int i = 1; i < labels.size(); i++) {
 				processingText = readLabelData(settingLoader
-						.getTestDataFolder()
+					.getTestDataFolder()
 				// .getTrainingDataFolder()
 						+ Label.getLabelPath(labelMapping.get(labels.get(i))));
 

@@ -72,24 +72,24 @@ public class Main {
 //		}
 		
 		
-	
+
 		PrivacyPracticeExtractor ppe = ExtractorFactory
 				.createPrivacyPracticeExtractor();
 		
-		Extractor ex = new Extractor();
-		ex.initialize();
-		try {
-			TextReader tr = new TextReader();
-			String policy = tr.readText("C:\\Users\\Moe\\Desktop\\test.txt");
-			
-			ppe.extract(policy, "");
-			//HashMap<Label, List<Sentence>> classified = ppe.classifyPolicySentences(policy);
-			//HashMap<Label, String> summarized = ex.extract(classified);
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//ppe.trainExtractor(false, true, 100);
+		ppe.evaluateClassifier();
+//		
+//		Extractor ex = new Extractor();
+//		ex.initialize();
+//		try {
+//			TextReader tr = new TextReader();
+//			String policy = tr.readText("C:\\Users\\MoePC\\Desktop\\test.txt");
+//			
+//			ppe.extract(policy, "");			
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		/******* Testing PreProcessing */
 		// ITextReader textReader = new TextReader();
