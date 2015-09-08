@@ -3,6 +3,7 @@ package test;
 import engine.*;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import model.Text;
 import model.WordType;
@@ -21,11 +22,11 @@ import services.*;
 import engine.preprocessing.*;
 import engine.classifier.*;
 import engine.extractor.Extractor;
+import engine.extractor.IExtractor;
 import model.*;
 
 import edu.stanford.*;
 import edu.stanford.nlp.trees.WordStemmer;
-
 
 public class Main {
 	public static void main(String[] args) {
@@ -52,7 +53,7 @@ public class Main {
 
 		try {
 			LabelConverter.write(root, tw,
-					"C:\\Users\\MoePC\\Desktop\\test2.txt");
+					"C:\\Users\\MoePC\\Desktop\\Instagram.txt");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,37 +61,34 @@ public class Main {
 	}
 
 	private static void testClassifier() {
-		//binary 110
-//		for (int i = 10; i < 200; i += 10) {
-//			PrivacyPracticeExtractor ppe = ExtractorFactory
-//					.createPrivacyPracticeExtractor();
-//			ppe.trainExtractor(false, true,i);
-//
-//			PrivacyPracticeExtractor validator = ExtractorFactory
-//					.createPrivacyPracticeExtractor();
-//			validator.evaluate();
-//		}
-		
-		
+		// IParser myParser = new Parser();
+		// engine.extractor.TripletExtractor te = new
+		// engine.extractor.TripletExtractor(myParser);
+		// try {
+		// String test =
+		// te.extractTriplet("From time to time , we may use your personal information to send important notices , such as communications about purchases and changes to our terms , conditions , and policies .");
+		// System.out.println(test);
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// System.out.println("Hallo");
 
-		PrivacyPracticeExtractor ppe = ExtractorFactory
-				.createPrivacyPracticeExtractor();
-		
-		//ppe.trainExtractor(false, true, 100);
-		ppe.evaluateClassifier();
-//		
-//		Extractor ex = new Extractor();
-//		ex.initialize();
-//		try {
-//			TextReader tr = new TextReader();
-//			String policy = tr.readText("C:\\Users\\MoePC\\Desktop\\test.txt");
-//			
-//			ppe.extract(policy, "");			
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+		//
+		try {
+			PrivacyPracticeExtractor ppe = ExtractorFactory
+					.createPrivacyPracticeExtractor();
+
+			TextReader tr = new TextReader();
+			String policy = tr
+					.readText("C:\\Users\\MoePC\\Desktop\\Instagram.txt");
+
+			ppe.extract(policy, "");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		/******* Testing PreProcessing */
 		// ITextReader textReader = new TextReader();
 		// ITextWriter textWriter = new TextWriter();

@@ -1,5 +1,9 @@
 package engine.extractor;
 
+/**
+ * This class implements a wrapper for the OPENIE v.4.1.3 Framework
+ * [not used]
+ */
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +28,14 @@ public class Extractor implements IExtractor{
 		if(!initialized){
 			openIE = new OpenIE(new ClearParser(new ClearPostagger(
 	                new ClearTokenizer())),
-	                new ClearSrl(), false);
+	                new ClearSrl(), true);
 			initialized = true;
 		}
 	}
 	
 	public HashMap<Label, String> extract(HashMap<Label, List<Sentence>> classifiedSentences) throws Exception {
 		if(!initialized)
-			throw new Exception("Extractor has to be initalized first.");
+			this.initialize();
 		
 		HashMap<Label, String> summarization = new HashMap<Label,String>();
 		

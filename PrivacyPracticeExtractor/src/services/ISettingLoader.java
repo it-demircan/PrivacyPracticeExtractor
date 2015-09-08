@@ -11,4 +11,6 @@ public interface ISettingLoader {
 	public String getCorpusFile() throws FileNotFoundException, IOException;
 	public String getPrototypesFile() throws FileNotFoundException, IOException;
 	public String getLabelDocumentCounterFile() throws FileNotFoundException, IOException;
+	public int getCompressionTimeOut() throws FileNotFoundException,
+	IOException;
 }

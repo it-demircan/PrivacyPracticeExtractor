@@ -1,5 +1,5 @@
 package model;
 
 public enum WordType {
-	Complete,Raw, Stem, Lemma
+	Complete,Raw, Stem, Lemma, PosTagged
 }

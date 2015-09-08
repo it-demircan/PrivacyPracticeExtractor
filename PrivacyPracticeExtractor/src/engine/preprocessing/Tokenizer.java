@@ -7,6 +7,7 @@ import model.Sentence;
 import model.Text;
 import model.Word;
 
+import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
@@ -18,7 +19,7 @@ import edu.stanford.nlp.util.CoreMap;
 public class Tokenizer extends CoreNLP implements ITokenizer {
 
 	public Tokenizer() {
-		this.setProperty("tokenize, ssplit");
+		this.setProperty("tokenize, ssplit, pos");
 		pipeline = new StanfordCoreNLP(props);
 	}
 
@@ -52,7 +53,8 @@ public class Tokenizer extends CoreNLP implements ITokenizer {
 			int wPos = 0; //Word Position
 			for (CoreLabel token : sentence.get(TokensAnnotation.class)) {
 				String word = token.get(TextAnnotation.class);
-				Word nextWord = new Word(wPos);
+				String posTag = token.get(PartOfSpeechAnnotation.class);
+				Word nextWord = new Word(wPos,posTag);
 				nextWord.setValue(word);
 				sen.appendWord(nextWord);
 				wPos++;

@@ -13,6 +13,14 @@ public class Word {
 		this.position = position;
 	}
 	
+	public Word(int position, String posTag){
+		value = "";
+		stem = "";
+		lemma = "";
+		this.posTag = posTag;
+		this.position = position;
+	}
+	
 	public String getProcessingValue(){
 		return stem;
 	}

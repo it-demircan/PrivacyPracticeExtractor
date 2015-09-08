@@ -19,11 +19,11 @@ import edu.stanford.nlp.util.CoreMap;
 
 public class Parser extends CoreNLP implements IParser {
 	public Parser() {
-		this.setProperty("annotators,tokenize, ssplit, pos, lemma, ner, parse");
+		this.setProperty("tokenize, ssplit, pos, lemma, ner, parse");
 		pipeline = new StanfordCoreNLP(props);
 	}
 
-	public SemanticGraph parse(String toParse) {
+	public Tree parse(String toParse) {
 		// read some text in the text variable
 		String text = toParse;
 		// create an empty Annotation just with the given text
@@ -36,7 +36,7 @@ public class Parser extends CoreNLP implements IParser {
 		// a CoreMap is essentially a Map that uses class objects as keys and
 		// has values with custom types
 		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
-
+		Tree tree = null;
 		for (CoreMap sentence : sentences) {
 			// traversing the words in the current sentence
 			// a CoreLabel is a CoreMap with additional token-specific methods
@@ -50,11 +50,11 @@ public class Parser extends CoreNLP implements IParser {
 			}
 
 			// this is the parse tree of the current sentence
-			Tree tree = sentence.get(TreeAnnotation.class);
+			tree = sentence.get(TreeAnnotation.class);
 
 			// this is the Stanford dependency graph of the current sentence
 		}
 		
-		return null;
+		return tree;
 	}
 }

@@ -69,6 +69,8 @@ public class Sentence {
 				break;
 			case Complete:
 				result += "["+word.getValue()+";L:"+word.getLemma()+";S:"+word.getStem()+";PT:"+word.getPosTag()+";isStopWord:"+word.isStopWord()+";P:"+word.getPosition()+"] ";
+			case PosTagged:
+				result += " "+word.getValue()+"/"+word.getPosTag();
 			}	
 		}
 		return result;

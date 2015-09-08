@@ -91,9 +91,15 @@ public class PrivacyPracticeExtractor {
 			    		sentences += sen.toString() +"\r\n";
 			    	}
 			    	
+			    	String posTagged = "";
+			    	for(Sentence sen: classifiedSentence.get(labels.get(i))){
+			    		posTagged += sen.toString(WordType.PosTagged) +"\r\n";
+			    	}
+			    	
 			    	String sum = summarization.get(labels.get(i));
 			    	
 			    	textWriter.write(sentences, labelOutput + "\\classifiedSentences.txt");
+			    	textWriter.write(posTagged, labelOutput + "\\posTagged.txt");
 			    	textWriter.write(sum, labelOutput + "\\summarization.txt");
 			    }
 			}else{
@@ -107,8 +113,6 @@ public class PrivacyPracticeExtractor {
 	}
 
 	public HashMap<Label, String> summarize(HashMap<Label, List<Sentence>> classifiedSentences) throws Exception{
-		extractor.initialize();
-		
 		HashMap<Label, String> summa = extractor.extract(classifiedSentences);
 		return summa;
 	}

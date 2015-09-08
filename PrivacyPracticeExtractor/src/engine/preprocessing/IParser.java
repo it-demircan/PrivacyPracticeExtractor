@@ -1,5 +1,7 @@
 package engine.preprocessing;
 
-public interface IParser {
+import edu.stanford.nlp.trees.Tree;
 
+public interface IParser {
+	public Tree parse(String toParse);
 }
