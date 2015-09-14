@@ -12,6 +12,10 @@ import engine.preprocessing.*;
 
 public class ExtractorFactory {
 
+	/**
+	 * Create a instance of PPE class and inject all dependencies.
+	 * @return PrivacyPracticeExtractor instance
+	 */
 	public static PrivacyPracticeExtractor createPrivacyPracticeExtractor() throws FileNotFoundException, IOException{
 		ITextReader textReader = new TextReader();
 		ITextWriter textWriter = new TextWriter();
