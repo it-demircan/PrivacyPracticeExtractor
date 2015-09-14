@@ -45,15 +45,20 @@ public class SettingLoader implements ISettingLoader {
 		return Integer.parseInt(loadProperty("compressionTimeOutSeconds"));
 	}
 
+	public int getFeatureSelectorSize() throws FileNotFoundException,
+			IOException {
+		return Integer.parseInt(loadProperty("featureSelection"));
+	}
+
 	private String loadProperty(String propIdentifier) {
 		Properties properties = new Properties();
 		String probValue = "";
 		try (BufferedInputStream stream = new BufferedInputStream(
-				new FileInputStream("src\\miscellaneous\\settings.properties"))) {
+				new FileInputStream("./settings.properties"))) {
 			properties.load(stream);
 			probValue = properties.getProperty(propIdentifier);
 		} catch (FileNotFoundException err) {
-			Logger.error("Property File not found at \\miscellaneous\\settings.properties");
+			Logger.error("Property File settings.properties not found.");
 		} catch (IOException e) {
 			Logger.error(e.getMessage());
 		}

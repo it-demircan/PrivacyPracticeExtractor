@@ -13,4 +13,6 @@ public interface ISettingLoader {
 	public String getLabelDocumentCounterFile() throws FileNotFoundException, IOException;
 	public int getCompressionTimeOut() throws FileNotFoundException,
 	IOException;
+	public int getFeatureSelectorSize() throws FileNotFoundException,
+	IOException;
 }

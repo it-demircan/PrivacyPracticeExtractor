@@ -26,6 +26,11 @@ import model.*;
 import engine.preprocessing.*;
 import services.*;
 
+/**
+ * Privacy Practice Extractor, which is the interface for the classification and summarization process.
+ * @author Muhammed Demircan
+ *
+ */
 public class PrivacyPracticeExtractor {
 	HashMap<Label, Tree<Label>> labelMapping;
 	HashMap<Label, Text> preprocessedTexts;
@@ -66,10 +71,16 @@ public class PrivacyPracticeExtractor {
 	public void extract(String privacyPolicy, String outputPath){
 		Logger.info("Extraction process started");
 		try {
+			long startTime = System.currentTimeMillis();
 			HashMap<Label, List<Sentence>> classifiedSentence = classifyPolicySentences(privacyPolicy);
 			HashMap<Label, String> summarization = summarize(classifiedSentence);
+			long endTime = System.currentTimeMillis();
+			long seconds = (endTime - startTime) / 1000;
+			
 			Logger.info("Summarization complete!");
 			
+			String generalSummarization = "";
+			int sentenceCounter = 0;
 			
 			//Prepare output folder
 			SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
@@ -91,6 +102,8 @@ public class PrivacyPracticeExtractor {
 			    		sentences += sen.toString() +"\r\n";
 			    	}
 			    	
+			    	sentenceCounter+=classifiedSentence.get(labels.get(i)).size();
+			    	
 			    	String posTagged = "";
 			    	for(Sentence sen: classifiedSentence.get(labels.get(i))){
 			    		posTagged += sen.toString(WordType.PosTagged) +"\r\n";
@@ -98,10 +111,22 @@ public class PrivacyPracticeExtractor {
 			    	
 			    	String sum = summarization.get(labels.get(i));
 			    	
-			    	textWriter.write(sentences, labelOutput + "\\classifiedSentences.txt");
-			    	textWriter.write(posTagged, labelOutput + "\\posTagged.txt");
-			    	textWriter.write(sum, labelOutput + "\\summarization.txt");
+			    	generalSummarization += "\r\n";
+			    	generalSummarization += "############" + labels.get(i).getName() +"############\r\n";
+			    	generalSummarization += sum;
+			    	
+			    	textWriter.write(sentences, labelOutput + "/classifiedSentences.txt");
+			    	textWriter.write(posTagged, labelOutput + "/posTagged.txt");
+			    	textWriter.write(sum, labelOutput + "/summarization.txt");
 			    }
+			    
+			    generalSummarization = "############ General Information ############\r\n"
+			    					+  "Sentences analysed: " + sentenceCounter + "\r\n"
+			    					+  "Duration (in seconds): " + seconds + "\r\n"
+			    					+  "#############################################\r\n"
+			    					+ generalSummarization;
+			    
+			    textWriter.write(generalSummarization, preparedPath + "/completeSummarization.txt");
 			}else{
 				throw new Exception("Output folder could not created!");
 			}
@@ -112,12 +137,22 @@ public class PrivacyPracticeExtractor {
 		}
 	}
 
-	public HashMap<Label, String> summarize(HashMap<Label, List<Sentence>> classifiedSentences) throws Exception{
+	/**
+	 * Summarize each classified sentence and returns a mapping between a class and all summarized sentences
+	 * @param classifiedSentences - classified sentences
+	 * @return - summarized sentences mapped to their labels
+	 */
+	private HashMap<Label, String> summarize(HashMap<Label, List<Sentence>> classifiedSentences) throws Exception{
 		HashMap<Label, String> summa = extractor.extract(classifiedSentences);
 		return summa;
 	}
 
-	public HashMap<Label, List<Sentence>> classifyPolicySentences(String text)
+	/**
+	 * Maps sentences to their predicted class.
+	 * @param text - The sentences which should be classified.
+	 * @return Mapping between classes and their (predicted) sentences
+	 */
+	private HashMap<Label, List<Sentence>> classifyPolicySentences(String text)
 			throws Exception {
 		HashMap<Label, List<Sentence>> classifiedSentences = new HashMap<Label, List<Sentence>>();
 		Logger.info("Classification process starts...");
@@ -197,9 +232,24 @@ public class PrivacyPracticeExtractor {
 		}
 	}
 	
+	
+	/**
+	 * Trains the classifier
+	 * 
+	 * @param useExistingCorpus
+	 *            - If you want to use a existing corpus file
+	 * @param saveCorpus
+	 *            - When you dont use a existing corpus file, you can save the
+	 *            newly calculated corpus
+	 **/
+	public void trainClassifier(boolean useExistingCorpus, boolean saveCorpus) throws FileNotFoundException, IOException{
+		int noWords = settingLoader.getFeatureSelectorSize();
+		trainClassifier(useExistingCorpus,saveCorpus,noWords);
+	}
+	
 
 	/**
-	 * Trains the Extractor
+	 * Trains the classifier
 	 * 
 	 * @param useExistingCorpus
 	 *            - If you want to use a existing corpus file
@@ -209,7 +259,7 @@ public class PrivacyPracticeExtractor {
 	 * @param noWords
 	 *            - Top k words for Feature Selection
 	 */
-	public void trainExtractor(boolean useExistingCorpus, boolean saveCorpus,
+	public void trainClassifier(boolean useExistingCorpus, boolean saveCorpus,
 			int noWords) {
 		try {
 			String pathToStructureFile = settingLoader
@@ -234,7 +284,7 @@ public class PrivacyPracticeExtractor {
 
 				labelDocumentCounter.put(recent, readTrainingText
 						.getSentences().size());
-				Logger.info("Corpus Populated with Trainingdata from Label: "
+				Logger.info("Corpus populated with (training-) data from Label: "
 						+ recent.getName());
 			}
 

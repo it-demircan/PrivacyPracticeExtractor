@@ -11,6 +11,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import services.Logger;
+
 import edu.stanford.nlp.trees.Tree;
 import engine.preprocessing.IParser;
 
@@ -44,15 +46,16 @@ public class TripletExtractor implements IExtractor {
 			Map.Entry pair = (Map.Entry) it.next();
 			Label nextLabel = (Label) pair.getKey();
 
-			System.out.println("Summarizing:" + nextLabel.getName());
+			Logger.info("Summarizing:" + nextLabel.getName());
 
 			String compressedSentence = "";
 			for (Sentence nextSentence : classifiedSentences.get(nextLabel)) {
+				ExecutorService executorService = null;
 				try {
 					//Fixing Label for concurrent thread.
 					//Stops calculation after "timeOut" seconds (each sentence).
 					final String sentence = nextSentence.toString();
-					ExecutorService executorService = Executors.newSingleThreadExecutor();
+					executorService = Executors.newSingleThreadExecutor();
 					compressedSentence += executorService.submit(new Callable<String>(){
 						@Override
 						public String call() throws Exception {
@@ -62,13 +65,13 @@ public class TripletExtractor implements IExtractor {
 					}).get(timeOut, TimeUnit.SECONDS);
 					
 					compressedSentence += "\r\n";
-					System.out.println("Working:" + compressedSentence);
 				}catch (TimeoutException e) {
-		            //TODO log
-		            System.out.println("failed - timeout");
+		            //System.out.println("failed - timeout");
+					if(executorService != null)
+						executorService.shutdownNow();	
 		        } catch (Exception err) {
 					// controlled catching
-					System.out.println("failed");
+					//System.out.println("failed");
 				}
 			}
 			compressed.put(nextLabel, compressedSentence);
