@@ -10,6 +10,11 @@ import services.ITextReader;
 import services.Logger;
 import model.*;
 
+/**
+ * Stop Word Remover/Filter
+ * @author Muhammed Demircan
+ *
+ */
 public class StopWordRemover implements IStopWordRemover{ 
 	ITextReader textReader;
 	ISettingLoader settingLoader;

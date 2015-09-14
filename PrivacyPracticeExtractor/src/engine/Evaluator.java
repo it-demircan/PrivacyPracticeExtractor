@@ -9,7 +9,7 @@ import model.*;
 
 /**
  * This Class is to evaluate the classification and extraction task.
- * @author Moe
+ * @author Muhammed Demircan
  *
  */
 public class Evaluator {

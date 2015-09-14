@@ -16,17 +16,20 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
+/**
+ * (Adapter) Class, which enables to use tokenizer from the Stanford CoreNLP API  
+ * @author Muhammed Demircan
+ *
+ */
 public class Tokenizer extends CoreNLP implements ITokenizer {
 
 	public Tokenizer() {
 		this.setProperty("tokenize, ssplit, pos");
 		pipeline = new StanfordCoreNLP(props);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see engine.preprocessing.ITokenizer#tokenize(java.lang.String)
+	
+	/**
+	 * Tokenize a single sentence into a List of all its words.
 	 */
 	public List<String> tokenize(String sentence) {
 		List<String> words = new LinkedList<String>();
@@ -42,6 +45,9 @@ public class Tokenizer extends CoreNLP implements ITokenizer {
 		return words;
 	}
 
+	/**
+	 * Tokenize a single sentence into a text (object)/document.
+	 */
 	public Text tokenizeToText(String text) {
 		Text processingText = new Text();
 		Annotation document = new Annotation(text);

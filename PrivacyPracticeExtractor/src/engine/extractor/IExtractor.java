@@ -8,7 +8,7 @@ import model.Sentence;
 
 public interface IExtractor {
 	/**
-	 * Extracts/Compress each sentence in the all labels.
+	 * Extracts/Compress each sentence in all labels.
 	 * @param classifiedSentences - label sentence mapping
 	 * @return - Compressed sentence for each label
 	 */

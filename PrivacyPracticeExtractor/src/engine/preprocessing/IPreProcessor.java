@@ -9,6 +9,9 @@ import model.Sentence;
 import model.Text;
 import model.Vector;
 
+/**
+ * See PreProcessor
+ */
 public interface IPreProcessor {
 	public Text processToText(String text);
 	public HashMap<Sentence,Vector> processToVector(Text text) throws Exception;

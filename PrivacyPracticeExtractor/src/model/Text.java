@@ -3,6 +3,11 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents a document containing sentence (instances)
+ * @author Muhammed Demircan
+ *
+ */
 public class Text {
 	List<Sentence> sentences;
 	

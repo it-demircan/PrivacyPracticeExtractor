@@ -1,8 +1,16 @@
 package engine.preprocessing;
 import model.*;
 
+/**
+ * Stemmer 
+ * @author Muhammed Demircan
+ *
+ */
 public class Stemmer implements IStemmer {
 
+	/**
+	 * Stems a word according to the underlying stemmer.
+	 */
 	public String stemm(String word) {
 		PorterStemmer s = new PorterStemmer();
 		char[] splittedWord = word.toCharArray();
@@ -14,6 +22,9 @@ public class Stemmer implements IStemmer {
 		return s.toString();
 	}
 	
+	/**
+	 * Stems all words in a document object.
+	 */
 	public void stemm(Text processingText){
 		for(Sentence nextSentence : processingText.getSentences()){
 			for(Word nextWord : nextSentence.getWords()){

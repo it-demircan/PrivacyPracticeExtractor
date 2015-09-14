@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Models a single word with its original value, stem, posTag and a stopword mark.
+ * @author Muhammed Demircan
+ *
+ */
 public class Word {
 	String value, stem, lemma, posTag;
 	int position;

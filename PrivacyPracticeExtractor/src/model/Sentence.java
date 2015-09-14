@@ -3,6 +3,11 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Represents a sentence build up from words
+ * @author Muhammed Demircan
+ *
+ */
 public class Sentence {
 	List<Word> words;
 	int position; //Position in Text
@@ -13,7 +18,9 @@ public class Sentence {
 		this.position = position;
 	}
 
-	
+	/**
+	 * Checks if a word is element of this sentence
+	 */
 	public boolean containsWord(String value){
 		for(int i = 0; i < words.size();i++)
 			if(words.get(i).getProcessingValue().equals(value))
@@ -54,6 +61,9 @@ public class Sentence {
 		return result;
 	}
 	
+	/**
+	 * Get the sentence as a string in different formats (e. g. stemmed sentence)
+	 */
 	public String toString(WordType type){
 		String result = "";
 		for(Word word : words){

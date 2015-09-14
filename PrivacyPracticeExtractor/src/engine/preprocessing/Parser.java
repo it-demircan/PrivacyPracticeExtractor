@@ -17,12 +17,20 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 
+/**
+ * (Adapter) Class, which enables to use parsing from the Stanford CoreNLP API  
+ * @author Muhammed Demircan
+ *
+ */
 public class Parser extends CoreNLP implements IParser {
 	public Parser() {
 		this.setProperty("tokenize, ssplit, pos, lemma, ner, parse");
 		pipeline = new StanfordCoreNLP(props);
 	}
 
+	/**
+	 * Parse a sentence and retrieve its parsing tree.
+	 */
 	public Tree parse(String toParse) {
 		// read some text in the text variable
 		String text = toParse;

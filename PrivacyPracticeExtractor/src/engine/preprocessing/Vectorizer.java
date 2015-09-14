@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 import model.*;
 
+/**
+ * Maps a sentence into a vector space according to the bag of words model.
+ * @author Muhammed Demircan
+ *
+ */
 public class Vectorizer implements IVectorizer{
 	Dictionary dictionary;
 	
@@ -11,6 +16,9 @@ public class Vectorizer implements IVectorizer{
 		this.dictionary = corpus;
 	}
 	
+	/**
+	 * Mapping a sentence into its correspondending vector
+	 */
 	@Override
 	public Vector mapToVector(Sentence sen) throws Exception {
 		if(dictionary == null || dictionary.getSize() == 0)
@@ -32,6 +40,10 @@ public class Vectorizer implements IVectorizer{
 		return mapping;
 	}
 	
+	/**
+	 * computes the tf-idf weight for a word in a sentence.
+	 * @return tf-idf weight
+	 */
 	private double computeWeighting(Sentence sen, Word word){
 		double weight = 0.0;
 		
@@ -53,6 +65,9 @@ public class Vectorizer implements IVectorizer{
 		return weight;
 	}
 
+	/**
+	 * Maps a whole document object into a set of sentence vector mappings.
+	 */
 	@Override
 	public HashMap<Sentence, Vector> mapToVector(Text text) throws Exception {
 		if(dictionary == null || dictionary.getSize() == 0)

@@ -3,10 +3,13 @@
 import java.util.HashMap;
 import java.util.List;
 
-import services.Logger;
-
 import model.*;
 
+/**
+ * Prepares text and sentences and maps them into a vector space.
+ * Also a Interface for feature selection is integrated.
+ * @author Muhammed Demircan
+ */
 public class PreProcessor implements IPreProcessor {
 
 	ITokenizer tokenizer;
@@ -25,6 +28,9 @@ public class PreProcessor implements IPreProcessor {
 		this.fSelector = fSelector;
 	}
 
+	/**
+	 * Maps a sentence(text) into a vector space
+	 */
 	public HashMap<Sentence, Vector> preProcessText(String text) throws Exception {
 		Text processingText = tokenizer.tokenizeToText(text);
 		stemmer.stemm(processingText);
@@ -34,6 +40,9 @@ public class PreProcessor implements IPreProcessor {
 		return mapping;
 	}
 
+	/**
+	 * Maps a text into a document object, containing multiple sentences
+	 */
 	public Text processToText(String text) {
 		Text processingText = tokenizer.tokenizeToText(text);
 		stemmer.stemm(processingText);
@@ -41,15 +50,24 @@ public class PreProcessor implements IPreProcessor {
 		return processingText;
 	}
 
+	/**
+	 * Maps a document object into a set of vectors (for each sentence in the document)
+	 */
 	public HashMap<Sentence, Vector> processToVector(Text text) throws Exception {
 		HashMap<Sentence, Vector> mapping = vectorizer.mapToVector(text);
 		return mapping;
 	}
 	
+	/**
+	 * Inject the corpus to all instances, which need it for calculations.
+	 */
 	public void updateCorpus(Dictionary corpus){
 		vectorizer.injectCorpus(corpus);
 	}
 
+	/**
+	 * Interface to perform feature selection.
+	 */
 	@Override
 	public Dictionary reduceCorpus(List<Label> labels, HashMap<Label, Text> readData,
 			Dictionary corpus, int noWords) {

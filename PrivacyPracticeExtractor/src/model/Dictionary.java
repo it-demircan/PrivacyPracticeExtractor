@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/*
+/**
  * This class represents the corpus
  */
 public class Dictionary implements Serializable{
@@ -120,14 +120,11 @@ public class Dictionary implements Serializable{
 		return size;
 	}
 	
-	public void removeEntriesExcept(List<String> list){
-//		for(int i = 0; i < elements.size();i++){
-//			for(int k = 0; k < list.size();k++)
-//				if(!elements.get(i).value.equals(list.get(k))){
-//					elements.remove(i);
-//				}
-//		}
-//		
+	/**
+	 * Removes the entries from recent corpus object except all elements given in list.
+	 * @param list - List with items, which should not be removed from corpus
+	 */
+	public void removeEntriesExcept(List<String> list){	
 		for (Iterator<CorpusElement> iter = elements.listIterator(); iter.hasNext(); ) {
 		    CorpusElement ce = iter.next();
 		    boolean contained = false;

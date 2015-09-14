@@ -3,6 +3,11 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Implements a generic tree structure, whose items are comparable.
+ * Contains static method for distance calculation.
+ * @author Muhammed Demircan
+ */
 public class Tree<T extends Comparable<T>> implements Comparable<Tree> {
 
 	/* Static Methods */

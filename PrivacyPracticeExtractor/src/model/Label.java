@@ -2,6 +2,11 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * Represents a class for classifier 
+ * @author Muhammed Demircan
+ *
+ */
 public class Label implements Comparable<Label>, Serializable{
 	private static final long serialVersionUID = -2938249652667559326L;
 

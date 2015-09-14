@@ -2,6 +2,10 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * Represents a mathematical vector also contains static methods for its operations like summation.
+ * @author Muhammed Demircan
+ */
 public class Vector implements Serializable{
 	private static final long serialVersionUID = 9008664883741727914L;
 
