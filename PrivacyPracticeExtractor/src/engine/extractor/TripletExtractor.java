@@ -60,7 +60,7 @@ public class TripletExtractor implements IExtractor {
 						@Override
 						public String call() throws Exception {
 							// TODO Auto-generated method stub
-							return extractTriplet(sentence);
+							return extract(sentence);
 						}	
 					}).get(timeOut, TimeUnit.SECONDS);
 					
@@ -86,11 +86,12 @@ public class TripletExtractor implements IExtractor {
 	 * @return - Extracted triplet
 	 * @throws Exception - If Extraction fails or is not possible, an exception will be thrown.
 	 */
-	public String extractTriplet(String sentence) throws Exception {
+	public String extract(String sentence) throws Exception {
 		String compressedSentence = "";
 		Tree parsedSentence = parser.parse(sentence);
 		compressedSentence = extractTriplet(parsedSentence);
 		return compressedSentence;
+		
 	}
 
 	/**

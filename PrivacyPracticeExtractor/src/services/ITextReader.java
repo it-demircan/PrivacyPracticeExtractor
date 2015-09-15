@@ -9,4 +9,5 @@ public interface ITextReader {
 	 * @throws IOException
 	 */
 	public String readText(String path) throws IOException;
+	public String readTextAndAddPunctuation(String path) throws IOException;
 }

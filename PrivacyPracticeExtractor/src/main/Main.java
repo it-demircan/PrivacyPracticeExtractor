@@ -3,10 +3,9 @@ package main;
 import engine.*;
 import services.*;
 
-/**
- * Entry point of the privacy practice extractor.
- * @author Muhammed Demircan
- *
+/* * Entry point of the privacy practice extractor.
+ @author Muhammed Demircan
+
  */
 public class Main {
 	public static void main(String[] args) {
@@ -18,31 +17,29 @@ public class Main {
 			PrivacyPracticeExtractor ppe = null;
 			switch (args[0]) {
 			case "-train":
-				 	ppe = ExtractorFactory.createPrivacyPracticeExtractor();
-					if(args[1] == null){
-						ppe.trainClassifier(false, true);
-					}
-					else if(args[1].equals("y")){
-						ppe.trainClassifier(true, false);
-					}
-					else if(args[1].equals("n")){
-						ppe.trainClassifier(false, true);
-					}
+				ppe = ExtractorFactory.createPrivacyPracticeExtractor(false);
+				if (args[1] == null) {
+					ppe.trainClassifier(false, true);
+				} else if (args[1].equals("y")) {
+					ppe.trainClassifier(true, false);
+				} else if (args[1].equals("n")) {
+					ppe.trainClassifier(false, true);
+				}
 				break;
 			case "-ext":
-					if(args[1] == null){
-						throw new Exception("Path to privacy policy missing - type -usage as argument for more information and help.");
-					}
-					else{
-						ppe = ExtractorFactory.createPrivacyPracticeExtractor();
-						ITextReader tr = new TextReader();
-						String privacy = tr.readText(args[1]);
-						ppe.extract(privacy, "./");
-					}
+				if (args[1] == null) {
+					throw new Exception(
+							"Path to privacy policy missing - type -usage as argument for more information and help.");
+				} else {
+					ppe = ExtractorFactory.createPrivacyPracticeExtractor(true);
+					ITextReader tr = new TextReader();
+					String privacy = tr.readText(args[1]);
+					ppe.extract(privacy, "./");
+				}
 				break;
 			case "-valid":
-					ppe = ExtractorFactory.createPrivacyPracticeExtractor();
-					ppe.evaluateClassifier();
+				ppe = ExtractorFactory.createPrivacyPracticeExtractor(false);
+				ppe.evaluateClassifier();
 				break;
 			case "-usage":
 				String infoText = "######### Help and Usage ##########\r\n";
@@ -56,8 +53,11 @@ public class Main {
 				Logger.info(infoText);
 				break;
 			default:
-				throw new Exception("Invalid mode selection. Type -usage as first argument for more information and help.");
+				throw new Exception(
+						"Invalid mode selection. Type -usage as first argument for more information and help.");
 			}
+			
+			Logger.saveLog();
 		} catch (Exception err) {
 			err.printStackTrace();
 		}

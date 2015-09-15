@@ -17,7 +17,7 @@ public class Label implements Comparable<Label>, Serializable{
 		if(labelNode.parent == null)
 			return res;
 		else
-			return getLabelPath(labelNode.parent) + "\\" +labelNode.getData().getName();
+			return getLabelPath(labelNode.parent) + "/" +labelNode.getData().getName();
 	}
 	
 	/* *************************  */

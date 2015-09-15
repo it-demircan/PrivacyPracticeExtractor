@@ -27,9 +27,11 @@ import engine.preprocessing.*;
 import services.*;
 
 /**
- * Privacy Practice Extractor, which is the interface for the classification and summarization process.
+ * Privacy Practice Extractor, which is the interface for the classification and
+ * summarization process.
+ * 
  * @author Muhammed Demircan
- *
+ * 
  */
 public class PrivacyPracticeExtractor {
 	HashMap<Label, Tree<Label>> labelMapping;
@@ -66,9 +68,8 @@ public class PrivacyPracticeExtractor {
 		this.classifier.setRequiredData(labelMapping, labels);
 
 	}
-	
-	
-	public void extract(String privacyPolicy, String outputPath){
+
+	public void extract(String privacyPolicy, String outputPath) {
 		Logger.info("Extraction process started");
 		try {
 			long startTime = System.currentTimeMillis();
@@ -76,58 +77,69 @@ public class PrivacyPracticeExtractor {
 			HashMap<Label, String> summarization = summarize(classifiedSentence);
 			long endTime = System.currentTimeMillis();
 			long seconds = (endTime - startTime) / 1000;
-			
+
 			Logger.info("Summarization complete!");
-			
+
 			String generalSummarization = "";
 			int sentenceCounter = 0;
-			
-			//Prepare output folder
-			SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//dd/MM/yyyy
-		    Date now = new Date();
-		    String strDate = sdfDate.format(now);
-		    strDate = strDate.replace(" ", "_");
-		    strDate = strDate.replace(":", "_");
-		    String preparedPath  = outputPath +"\\"+strDate+"_output";
-		    Logger.info("Saving results at: "+preparedPath);
-			
+
+			// Prepare output folder
+			SimpleDateFormat sdfDate = new SimpleDateFormat(
+					"yyyy-MM-dd HH:mm:ss");// dd/MM/yyyy
+			Date now = new Date();
+			String strDate = sdfDate.format(now);
+			strDate = strDate.replace(" ", "_");
+			strDate = strDate.replace(":", "_");
+			String preparedPath = outputPath + "\\" + strDate + "_output";
+			Logger.info("Saving results at: " + preparedPath);
+
 			boolean success = (new File(preparedPath)).mkdirs();
 			if (success) {
-			    for(int i = 1; i < labels.size();i++){
-			    	String labelOutput = preparedPath+labels.get(i).getLabelPath(labelMapping.get(labels.get(i)));
-			    	(new File(labelOutput)).mkdirs();
-			    	
-			    	String sentences = "";
-			    	for(Sentence sen: classifiedSentence.get(labels.get(i))){
-			    		sentences += sen.toString() +"\r\n";
-			    	}
-			    	
-			    	sentenceCounter+=classifiedSentence.get(labels.get(i)).size();
-			    	
-			    	String posTagged = "";
-			    	for(Sentence sen: classifiedSentence.get(labels.get(i))){
-			    		posTagged += sen.toString(WordType.PosTagged) +"\r\n";
-			    	}
-			    	
-			    	String sum = summarization.get(labels.get(i));
-			    	
-			    	generalSummarization += "\r\n";
-			    	generalSummarization += "############" + labels.get(i).getName() +"############\r\n";
-			    	generalSummarization += sum;
-			    	
-			    	textWriter.write(sentences, labelOutput + "/classifiedSentences.txt");
-			    	textWriter.write(posTagged, labelOutput + "/posTagged.txt");
-			    	textWriter.write(sum, labelOutput + "/summarization.txt");
-			    }
-			    
-			    generalSummarization = "############ General Information ############\r\n"
-			    					+  "Sentences analysed: " + sentenceCounter + "\r\n"
-			    					+  "Duration (in seconds): " + seconds + "\r\n"
-			    					+  "#############################################\r\n"
-			    					+ generalSummarization;
-			    
-			    textWriter.write(generalSummarization, preparedPath + "/completeSummarization.txt");
-			}else{
+				for (int i = 1; i < labels.size(); i++) {
+					String labelOutput = preparedPath
+							+ labels.get(i).getLabelPath(
+									labelMapping.get(labels.get(i)));
+					(new File(labelOutput)).mkdirs();
+
+					String sentences = "";
+					for (Sentence sen : classifiedSentence.get(labels.get(i))) {
+						sentences += sen.toString() + "\r\n";
+					}
+
+					sentenceCounter += classifiedSentence.get(labels.get(i))
+							.size();
+
+					String posTagged = "";
+					for (Sentence sen : classifiedSentence.get(labels.get(i))) {
+						posTagged += sen.toString(WordType.PosTagged) + "\r\n";
+					}
+
+					String sum = summarization.get(labels.get(i));
+
+					generalSummarization += "\r\n";
+					generalSummarization += "############"
+							+ labels.get(i).getName() + "############\r\n";
+					generalSummarization += sum;
+
+					textWriter.write(sentences, labelOutput
+							+ "/classifiedSentences.txt");
+					textWriter.write(posTagged, labelOutput + "/posTagged.txt");
+					textWriter.write(sum, labelOutput + "/summarization.txt");
+				}
+
+				generalSummarization = "############ General Information ############\r\n"
+						+ "Sentences analysed: "
+						+ sentenceCounter
+						+ "\r\n"
+						+ "Duration (in seconds): "
+						+ seconds
+						+ "\r\n"
+						+ "#############################################\r\n"
+						+ generalSummarization;
+
+				textWriter.write(generalSummarization, preparedPath
+						+ "/completeSummarization.txt");
+			} else {
 				throw new Exception("Output folder could not created!");
 			}
 			Logger.info("Finished");
@@ -138,18 +150,25 @@ public class PrivacyPracticeExtractor {
 	}
 
 	/**
-	 * Summarize each classified sentence and returns a mapping between a class and all summarized sentences
-	 * @param classifiedSentences - classified sentences
+	 * Summarize each classified sentence and returns a mapping between a class
+	 * and all summarized sentences
+	 * 
+	 * @param classifiedSentences
+	 *            - classified sentences
 	 * @return - summarized sentences mapped to their labels
 	 */
-	private HashMap<Label, String> summarize(HashMap<Label, List<Sentence>> classifiedSentences) throws Exception{
+	private HashMap<Label, String> summarize(
+			HashMap<Label, List<Sentence>> classifiedSentences)
+			throws Exception {
 		HashMap<Label, String> summa = extractor.extract(classifiedSentences);
 		return summa;
 	}
 
 	/**
 	 * Maps sentences to their predicted class.
-	 * @param text - The sentences which should be classified.
+	 * 
+	 * @param text
+	 *            - The sentences which should be classified.
 	 * @return Mapping between classes and their (predicted) sentences
 	 */
 	private HashMap<Label, List<Sentence>> classifyPolicySentences(String text)
@@ -157,25 +176,71 @@ public class PrivacyPracticeExtractor {
 		HashMap<Label, List<Sentence>> classifiedSentences = new HashMap<Label, List<Sentence>>();
 		Logger.info("Classification process starts...");
 		prepareClassifier();
-		
+
 		for (int i = 0; i < labels.size(); i++) {
 			classifiedSentences.put(labels.get(i), new LinkedList<Sentence>());
 		}
-		
+
 		HashMap<Sentence, Vector> vectors = preProcessor.preProcessText(text);
-		
+
 		Iterator it = vectors.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry pair = (Map.Entry) it.next();
 			Sentence sen = (Sentence) pair.getKey();
-			Label result = classifier.predictLabel((Vector) pair
-					.getValue());
-			
+			Label result = classifier.predictLabel((Vector) pair.getValue());
+
 			classifiedSentences.get(result).add(sen);
 			it.remove();
 		}
 		Logger.info("Classification process finished...");
 		return classifiedSentences;
+	}
+
+	public void evaluateCompression(Label sentencesFromLabel) {
+		try {
+			/* ******************** */
+			/* Preparation Process */
+			/* ******************** */
+			Logger.info("Validation of Sentence Compressor starts...");
+
+			prepareClassifier();
+
+			/* ******************************* */
+			/* Extracting Process starts here */
+			/* ******************************* */
+			Text processingText;
+			String compression ="";
+			for (int i = 1; i < labels.size(); i++) {
+				if (labels.get(i).getName().equals(sentencesFromLabel.getName())) {
+					processingText = readLabelData(settingLoader
+							.getTestDataFolder()
+					// .getTrainingDataFolder()
+							+ Label.getLabelPath(labelMapping.get(labels.get(i))));
+					// Logger.info(labels.get(i).getName() + " has " +
+					// processingText.getSentences().size() + " sentences");
+					HashMap<Sentence, Vector> vectors = preProcessor
+							.processToVector(processingText);
+
+					Iterator it = vectors.entrySet().iterator();
+					while (it.hasNext()) {
+						Map.Entry pair = (Map.Entry) it.next();
+						Sentence sen = (Sentence) pair.getKey();
+						String extraction;
+						try{
+							extraction = extractor.extract(sen.toString());
+						}catch(Exception err){
+							extraction = "[-]";
+						}
+						compression += sen.toString()+ " ; "+extraction + "\r\n";
+						it.remove();
+					}
+				}
+			}
+			Logger.info(compression);
+			Logger.info("Evaluation of Compression Complete..");
+		} catch (Exception err) {
+			err.printStackTrace();
+		}
 	}
 
 	/**
@@ -187,7 +252,7 @@ public class PrivacyPracticeExtractor {
 			/* Preparation Process */
 			/* ******************** */
 			Logger.info("Validation process starts...");
-			
+
 			prepareClassifier();
 
 			/* ******************************* */
@@ -199,10 +264,11 @@ public class PrivacyPracticeExtractor {
 			List<Sentence> classified = new LinkedList<Sentence>();
 			for (int i = 1; i < labels.size(); i++) {
 				processingText = readLabelData(settingLoader
-					.getTestDataFolder()
+						.getTestDataFolder()
 				// .getTrainingDataFolder()
 						+ Label.getLabelPath(labelMapping.get(labels.get(i))));
-
+				// Logger.info(labels.get(i).getName() + " has " +
+				// processingText.getSentences().size() + " sentences");
 				HashMap<Sentence, Vector> vectors = preProcessor
 						.processToVector(processingText);
 
@@ -231,8 +297,7 @@ public class PrivacyPracticeExtractor {
 			err.printStackTrace();
 		}
 	}
-	
-	
+
 	/**
 	 * Trains the classifier
 	 * 
@@ -242,11 +307,11 @@ public class PrivacyPracticeExtractor {
 	 *            - When you dont use a existing corpus file, you can save the
 	 *            newly calculated corpus
 	 **/
-	public void trainClassifier(boolean useExistingCorpus, boolean saveCorpus) throws FileNotFoundException, IOException{
+	public void trainClassifier(boolean useExistingCorpus, boolean saveCorpus)
+			throws FileNotFoundException, IOException {
 		int noWords = settingLoader.getFeatureSelectorSize();
-		trainClassifier(useExistingCorpus,saveCorpus,noWords);
+		trainClassifier(useExistingCorpus, saveCorpus, noWords);
 	}
-	
 
 	/**
 	 * Trains the classifier
@@ -278,6 +343,8 @@ public class PrivacyPracticeExtractor {
 						+ Label.getLabelPath(labelMapping.get(recent));
 
 				Text readTrainingText = readLabelData(pathToTrainingData);
+				// Logger.info(labels.get(i).getName() + " has " +
+				// readTrainingText.getSentences().size() + " sentences");
 				preprocessedTexts.put(recent, readTrainingText);
 				if (!useExistingCorpus)
 					corpus.populate(readTrainingText);
@@ -330,9 +397,10 @@ public class PrivacyPracticeExtractor {
 			Logger.error(err.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Loads data from storage to classify
+	 * 
 	 * @throws Exception
 	 */
 	private void prepareClassifier() throws Exception {
@@ -419,7 +487,8 @@ public class PrivacyPracticeExtractor {
 		if (directoryListing != null) {
 			for (File child : directoryListing) {
 				if (child.isFile()) {
-					readText.append(textReader.readText(child.getAbsolutePath()));
+					readText.append(textReader.readTextAndAddPunctuation(child
+							.getAbsolutePath()));
 				}
 			}
 		}

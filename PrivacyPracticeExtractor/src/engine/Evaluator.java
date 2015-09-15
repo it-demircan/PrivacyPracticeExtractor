@@ -72,7 +72,7 @@ public class Evaluator {
 		
 		Logger.info("Mostly frequent wrong prediction into:");
 		for(int i = 0; i < wrongerCounter.length;i++){
-			System.out.println(labels.get(i).getName()+":"+wrongerCounter[i]);
+			Logger.info(labels.get(i).getName()+":"+wrongerCounter[i]);
 		}
 	}
 	

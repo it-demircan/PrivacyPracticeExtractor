@@ -14,25 +14,35 @@ public class ExtractorFactory {
 
 	/**
 	 * Create a instance of PPE class and inject all dependencies.
+	 * 
 	 * @return PrivacyPracticeExtractor instance
 	 */
-	public static PrivacyPracticeExtractor createPrivacyPracticeExtractor() throws FileNotFoundException, IOException{
+	public static PrivacyPracticeExtractor createPrivacyPracticeExtractor(
+			boolean injectExtractor) throws FileNotFoundException, IOException {
 		ITextReader textReader = new TextReader();
 		ITextWriter textWriter = new TextWriter();
 		ISettingLoader settingLoader = new SettingLoader();
-		
+
 		ITokenizer tokenizer = new Tokenizer();
 		IVectorizer vectorizer = new Vectorizer();
-		IStopWordRemover stopWordRemover = new StopWordRemover(textReader, settingLoader);
+		IStopWordRemover stopWordRemover = new StopWordRemover(textReader,
+				settingLoader);
 		IStemmer stemmer = new Stemmer();
 		IFeatureSelector fSelector = new FeatureSelector();
-		IParser parser = new Parser();
-		
-		IPreProcessor preProcessor = new PreProcessor(tokenizer, stopWordRemover, stemmer, vectorizer,fSelector);
+
+		IPreProcessor preProcessor = new PreProcessor(tokenizer,
+				stopWordRemover, stemmer, vectorizer, fSelector);
 		IClassifier classifier = new Hieron();
-		IExtractor extractor = new TripletExtractor(parser,settingLoader.getCompressionTimeOut());
+
+		IExtractor extractor = null;
+		if (injectExtractor) {
+			IParser parser = new Parser();
+			extractor = new TripletExtractor(parser,
+					settingLoader.getCompressionTimeOut());
+		}
 		
-		PrivacyPracticeExtractor ppe = new PrivacyPracticeExtractor(textReader, textWriter, settingLoader, preProcessor, classifier,extractor);
+		PrivacyPracticeExtractor ppe = new PrivacyPracticeExtractor(textReader,
+				textWriter, settingLoader, preProcessor, classifier, extractor);
 		return ppe;
 	}
 }

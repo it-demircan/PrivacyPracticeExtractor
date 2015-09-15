@@ -46,7 +46,7 @@ public class Extractor implements IExtractor{
 			List<Sentence> sentences = (List<Sentence>)pair.getValue();
 			String sum = "";
 			for(Sentence sen : sentences){
-				sum += extractFromSentence(sen.toString()) +"\r\n ";
+				sum += extract(sen.toString()) +"\r\n ";
 			}
 			summarization.put(recentLabel, sum);
 			//it.remove();
@@ -54,7 +54,7 @@ public class Extractor implements IExtractor{
 		return summarization;
 	}
 	
-	private String extractFromSentence(String sentence){
+	public String extract(String sentence){
 		Seq<Instance> extractions = openIE.extract(sentence);
 		double maxCon = 0.0;
 		String res = "";

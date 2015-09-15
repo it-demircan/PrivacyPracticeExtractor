@@ -22,4 +22,24 @@ public class TextReader implements ITextReader{
 		}
 		return readText.toString();
 	}
+	
+	/**
+	 * If a text is not ending with a punctuation, this method adds a punctuation.
+	 */
+	@Override
+	public String readTextAndAddPunctuation(String path)
+			throws IOException {
+		StringBuffer readText = new StringBuffer();
+		String readLine = "";
+		try(	FileReader fr = new FileReader(path);
+				BufferedReader br = new BufferedReader(fr)){
+			while((readLine = br.readLine()) != null){
+				if(!readLine.endsWith("."))
+					readLine = readLine+". ";
+				readText.append(readLine);
+				//readText.append(" ");
+			}
+		}
+		return readText.toString();
+	}
 }

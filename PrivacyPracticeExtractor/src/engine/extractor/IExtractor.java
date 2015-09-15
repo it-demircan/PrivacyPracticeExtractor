@@ -13,4 +13,5 @@ public interface IExtractor {
 	 * @return - Compressed sentence for each label
 	 */
 	public HashMap<Label, String> extract(HashMap<Label, List<Sentence>> classifiedSentences) throws Exception;
+	public String extract(String sentence) throws Exception;
 }
