@@ -12,7 +12,7 @@ import model.*;
  * @author Muhammed Demircan
  *
  */
-public class Evaluator {
+public class Evaluator implements IEvaluator{
 	HashMap<Label, Tree<Label>> labelMapping;
 	List<Label> labels;
 	HashMap<Label, Integer> labelDocumentCounter;
@@ -39,6 +39,10 @@ public class Evaluator {
 		falseNegativ = new HashMap<Label, Integer>();
 	}
 	
+	/**
+	 * Starts the evaluation process.
+	 * @param classifiedSentences - classified sentences, which should be evaluated.
+	 */
 	public void evaluate(List<Sentence> classifiedSentences){
 		Logger.info("##### Calculate Precision and Recall ####");
 		computePrecisionRecall(classifiedSentences);

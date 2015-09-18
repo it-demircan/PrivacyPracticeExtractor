@@ -288,7 +288,7 @@ public class PrivacyPracticeExtractor {
 			}
 
 			Logger.info("Evaluation computations started..");
-			Evaluator eva = new Evaluator(labels, labelMapping,
+			IEvaluator eva = new Evaluator(labels, labelMapping,
 					labelDocumentCounter, corpus.getNumberOfSentences());
 			eva.evaluate(classified);
 
